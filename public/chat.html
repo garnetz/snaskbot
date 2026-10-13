@@ -233,7 +233,7 @@ body {
 @media (max-width: 560px) {
   .chips { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding: 2px 2px 8px; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
 }
-.chatting .chips { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin: 0 0 10px; padding: 2px 2px 6px; scrollbar-width: none; order: 0; }
+.chatting .chips { order: -1; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin: 0 0 6px; padding: 2px 2px 6px; scrollbar-width: none; }
 .chip {
   flex: none;
   font: 600 .88rem/1.2 var(--font-body);
@@ -337,6 +337,85 @@ textarea:focus-visible { outline: 0; }
 .embed .cards { max-width: 100%; }
 .embed .card { grid-template-columns: 76px 1fr; }
 
+/* modes */
+.modes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 10px; order: 0; animation: rise .6s var(--ease-out) .75s both; }
+@media (max-width: 560px) { .modes { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: 2px; } .mode-btn { flex: none; } }
+.chatting .modes { justify-content: flex-start; margin-bottom: 8px; }
+.mode-btn {
+  font: 800 .66rem/1 var(--font-display);
+  font-stretch: 125%;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, transform .25s var(--ease-pop);
+}
+.mode-btn:hover { border-color: var(--ink); transform: rotate(-3deg); }
+.mode-btn[aria-pressed="true"] { background: var(--ink); color: var(--pink); }
+.mode-btn[aria-pressed="true"]::before { content: "● "; color: var(--hot); }
+
+/* attach (roast my logo) */
+.clip {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform .3s var(--ease-pop), background .2s;
+}
+.clip:hover { background: var(--pink); transform: rotate(-20deg); }
+.clip svg { width: 20px; height: 20px; }
+form { padding-left: 10px; }
+.attach-preview { position: relative; flex: none; margin-bottom: 4px; animation: pop .4s var(--ease-pop); }
+.attach-preview img { width: 44px; height: 44px; object-fit: cover; border-radius: 10px; border: 2px solid var(--ink); display: block; }
+.attach-preview button {
+  position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; border-radius: 50%;
+  border: 0; background: var(--ink); color: var(--pink); font-size: 13px; line-height: 1; cursor: pointer; padding: 0;
+}
+.me .bubble img.sent { display: block; max-width: 180px; max-height: 180px; border-radius: 12px; margin-bottom: 8px; border: 2px solid var(--pink); }
+.chip.roast { background: var(--ink); color: var(--pink); }
+.chip.roast:hover { background: var(--hot); color: var(--ink); }
+
+/* reply tools + poster */
+.reply-tools { display: flex; gap: 10px; margin-top: 4px; padding-left: 4px; animation: rise .4s var(--ease-out) .3s both; }
+.reply-tools button { font: 700 .72rem/1 var(--font-body); color: var(--muted); background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.reply-tools button:hover { color: var(--ink); text-decoration-color: var(--hot); }
+[hidden] { display: none !important; }
+.poster-modal { position: fixed; inset: 0; z-index: 20; background: color-mix(in srgb, var(--ink) 75%, transparent); display: grid; place-items: center; padding: 16px; animation: fade .25s ease; }
+@keyframes fade { from { opacity: 0; } }
+.poster-box { display: flex; flex-direction: column; align-items: center; gap: 12px; max-height: 100%; animation: pop .45s var(--ease-pop); }
+.poster-box canvas { width: auto; height: auto; max-width: min(420px, 100%); max-height: calc(100vh - 140px); aspect-ratio: 1080 / 1350; border-radius: 6px; box-shadow: 0 20px 60px rgb(0 0 0 / .4); }
+.poster-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.poster-actions button { font: 800 .8rem/1 var(--font-display); font-stretch: 125%; text-transform: uppercase; letter-spacing: .05em; padding: 11px 16px; border-radius: 999px; border: 2px solid var(--pink); background: var(--pink); color: var(--ink); cursor: pointer; transition: transform .2s var(--ease-pop); }
+.poster-actions button:hover { transform: translateY(-2px) rotate(-2deg); }
+.poster-actions .ghost { background: transparent; color: var(--pink); }
+.poster-note { margin: 0; color: var(--pink); font-size: .8rem; text-align: center; min-height: 1em; }
+
+/* brief form */
+.brief { margin-top: 12px; display: grid; gap: 8px; background: var(--pink); border: 2px solid var(--ink); border-radius: 16px; padding: 14px; white-space: normal; max-width: 420px; animation: pop .5s var(--ease-pop) both; }
+.brief h3 { margin: 0; font: 900 1rem/1.1 var(--font-display); font-stretch: 125%; text-transform: uppercase; }
+.brief p { margin: 0; font-size: .8rem; color: var(--muted); }
+.brief label { display: grid; gap: 3px; font-size: .72rem; font-weight: 700; }
+.brief input, .brief textarea, .brief select { font: 500 .9rem/1.3 var(--font-body); color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 10px; padding: 8px 10px; width: 100%; }
+.brief textarea { resize: vertical; min-height: 70px; }
+.brief .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 420px) { .brief .row { grid-template-columns: 1fr; } }
+.brief .hp { position: absolute; left: -9999px; }
+.brief button[type="submit"], .brief .copy { justify-self: start; font: 800 .78rem/1 var(--font-display); font-stretch: 125%; text-transform: uppercase; letter-spacing: .05em; padding: 10px 16px; border-radius: 999px; border: 0; background: var(--ink); color: var(--pink); cursor: pointer; transition: transform .2s var(--ease-pop), background .2s; }
+.brief button[type="submit"]:hover, .brief .copy:hover { background: var(--hot); color: var(--ink); transform: rotate(-2deg); }
+.brief pre { margin: 0; white-space: pre-wrap; font: 500 .8rem/1.4 var(--font-body); background: var(--paper); border-radius: 10px; padding: 10px; border: 1.5px dashed var(--ink); }
+.brief .err { color: #b00040; font-size: .78rem; font-weight: 700; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .ticker .track { animation: none; }
@@ -361,7 +440,13 @@ textarea:focus-visible { outline: 0; }
     <div class="dock">
       <div class="dock-inner">
         <div class="chips" id="chips" aria-label="Starter questions"></div>
+        <div class="modes" id="modes" role="group" aria-label="Mode"></div>
         <form id="form">
+          <button type="button" class="clip" id="clip" aria-label="Attach a logo or screenshot to roast" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5 12.5 20a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg>
+          </button>
+          <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+          <div class="attach-preview" id="preview" hidden><img id="preview-img" alt="Image to roast"><button type="button" id="preview-x" aria-label="Remove image">×</button></div>
           <textarea id="box" rows="1" aria-label="Message" placeholder="Ask me anything. Be brave." autocomplete="off"></textarea>
           <button class="send" id="send" type="submit" aria-label="Send">
             <svg class="ico-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5M9 5h10v10"/></svg>
@@ -379,6 +464,18 @@ textarea:focus-visible { outline: 0; }
   </div>
 </div>
 
+<div class="poster-modal" id="poster" hidden>
+  <div class="poster-box">
+    <canvas id="poster-canvas" width="1080" height="1350" aria-label="Poster of the answer"></canvas>
+    <div class="poster-actions">
+      <button type="button" id="poster-save">Save image</button>
+      <button type="button" id="poster-share" hidden>Share</button>
+      <button type="button" id="poster-close" class="ghost">Close</button>
+    </div>
+    <p class="poster-note" id="poster-note"></p>
+  </div>
+</div>
+
 <script>window.SNASK_MODE = "server";</script>
 <script>
 const PERSONA = "";
@@ -393,7 +490,8 @@ window.addEventListener("message", (e) => {
 const MODE = window.SNASK_MODE || "artifact"; // "artifact" uses Claude in the viewer; "server" posts to /api/chat
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const CATALOG = {"case": {"hives-countdown": {"title": "Countdown to Shutdown", "client": "The Hives", "kind": "Music video", "blurb": "Corporate execs run the show while the band stays missing until the finale.", "url": "https://snask.com/case/the-hives-countdown-to-shutdown/", "img": "https://snask.com/wp-content/uploads/2023/06/thehives_0_web.png"}, "hives-enough": {"title": "Enough is Enough", "client": "The Hives", "kind": "Music video", "blurb": "The band alone in a boxing ring against a hostile crowd. No Rocky montages.", "url": "https://snask.com/case/the-hives-enough-is-enough/", "img": "https://snask.com/wp-content/uploads/2025/04/hives_thumb-1250x720.png"}, "viagra-boys": {"title": "Punk Rock Loser & Ain't No Thief", "client": "Viagra Boys", "kind": "Music videos", "blurb": "Two videos for the songs that open the album Cave World.", "url": "https://snask.com/case/viagra-boys-punk-rock-loser-aint-no-thief/", "img": "https://snask.com/wp-content/uploads/2022/04/00_viagra_boys_thumbnail-1.webp"}, "klarna-horse": {"title": "Long Haired Horse", "client": "Klarna", "kind": "Film", "blurb": "Part of Smoooth Situations: five handcrafted dream worlds.", "url": "https://snask.com/case/klarna-long-haired-horse/", "img": "https://snask.com/wp-content/uploads/2021/01/klarna_horse_thumbs2.png-1.webp"}, "klarna-smoooth": {"title": "Smoooth", "client": "Klarna", "kind": "Campaign", "blurb": "Film, photo and stills set in Klarna's heightened, smoooth lifestyle world.", "url": "https://snask.com/case/klarna-branded-content/", "img": "https://snask.com/wp-content/uploads/2021/04/SSP_HighHeeledCurling_Emotional_4x5-scaled.jpg"}, "love-korea": {"title": "Love Korea", "client": "ICON Magazine", "kind": "Rebrand", "blurb": "North Korea, rebranded around love. Free files, if they prove they're a democracy.", "url": "https://snask.com/case/north-korea-rebrand/", "img": "https://snask.com/wp-content/uploads/2018/09/northkorea.png"}, "shower-beer": {"title": "Shower Beer", "client": "SNASK", "kind": "Packaging & brand", "blurb": "Sweet but strong pale ale in a palm-friendly 18 cl bottle. Disco is dead.", "url": "https://snask.com/case/shower-beer/", "img": "https://snask.com/wp-content/uploads/2016/12/shower-beer_webthumb.png"}, "toggl": {"title": "Toggl rebrand", "client": "Toggl", "kind": "Rebrand", "blurb": "Three products, one brand: identity, logo, photos and films.", "url": "https://snask.com/case/toggl-rebrand-strategy-visual-identity-production/", "img": "https://snask.com/wp-content/uploads/2023/06/toggl_00_thumbnail.png"}, "xbox": {"title": "This is an Xbox", "client": "Xbox", "kind": "Film", "blurb": "One continuous flowing film of Xbox on every device in everyday life.", "url": "https://snask.com/case/xbox-this-is-an-xbox/", "img": "https://snask.com/wp-content/uploads/2024/11/02_xbox_still-1250x703.png"}, "curaprox": {"title": "House of Mouth", "client": "Curaprox", "kind": "Brand film", "blurb": "A surreal film where everything starts with the mouth.", "url": "https://snask.com/case/curaprox-house-of-mouth/", "img": "https://snask.com/wp-content/uploads/2026/04/house-of-mouth_2-2-3.jpg"}, "meta": {"title": "Personalization II", "client": "Meta", "kind": "Films", "blurb": "A yeti, a witch and a headless horseman explain your feed.", "url": "https://snask.com/case/meta-personalization-ii/", "img": "https://snask.com/wp-content/uploads/2025/09/meta_thumb.png"}, "cheezington": {"title": "Cheezington!", "client": "Oddlygood", "kind": "Campaign", "blurb": "Launch films for a vegan cheese with a very odd name.", "url": "https://snask.com/case/oddlygood-cheezington/", "img": "https://snask.com/wp-content/uploads/2024/10/20240625_oddlygood44826-1250x833.png"}, "fortnox": {"title": "Fortnox rebrand", "client": "Fortnox", "kind": "Rebrand", "blurb": "Bookkeeping software turned trusted hub for businesses and society.", "url": "https://snask.com/case/fortnox/", "img": "https://snask.com/wp-content/uploads/2022/08/00-Fortnox-Behance-Profile.jpg-1.webp"}, "schuh": {"title": "schuh rebrand", "client": "schuh", "kind": "Rebrand", "blurb": "UK shoe retailer, refocused from products to people.", "url": "https://snask.com/case/schuh-rebrand-of-uk-shoe-retailer/", "img": "https://snask.com/wp-content/uploads/2020/05/schuh_thumb2.png-1.webp"}, "spotify-dok": {"title": "Dok podcast identity", "client": "Spotify", "kind": "Identity", "blurb": "A flexible type system so any episode title fits on one line.", "url": "https://snask.com/case/spotify-doks-podcast-branding/", "img": "https://snask.com/wp-content/uploads/2021/05/spotify_thumb-1.webp"}, "ica-stop": {"title": "ICA Stop T\u00e4by", "client": "ICA", "kind": "Store & brand", "blurb": "A cluttered family grocery store turned food destination.", "url": "https://snask.com/case/ica-stop-taby-branding-concept-design-video/", "img": "https://snask.com/wp-content/uploads/2024/02/ica-stop_02_2x3.jpg"}, "lensway": {"title": "Lensway rebrand films", "client": "Lensway", "kind": "Stop motion", "blurb": "Eyewear brand rebuilt around eyes, bold colour and stop motion.", "url": "https://snask.com/case/lensway-rebrand-films/", "img": "https://snask.com/wp-content/uploads/2018/05/webthumb.png-1.webp"}}, "shop": {"pink-lies-jumper": {"title": "Pink Lies Jumper", "kind": "Unisex jumper", "price": "129 EUR", "url": "https://snask.com/product/pink-lies-jumper/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-LIES.jpg"}, "book": {"title": "Make Enemies & Gain Fans", "kind": "Book, 3rd and final edition", "price": "36 EUR", "url": "https://snask.com/product/make-enemies-gain-fans-3rd-and-final-edition-in-holographic-cover/", "img": "https://snask.com/wp-content/uploads/2024/11/snask_ncover_hori.jpg"}, "snask-off-tee": {"title": "SNASK Off! T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/snask-off-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-SNASK-OFF-TS-01.jpg"}, "pink-tiger-tee": {"title": "Pink Tiger T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/pink-tiger-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-TIGER.jpg"}, "extremely-right-poster": {"title": "Just Because You Are Extremely Right Doesn't Mean You Are Correct", "kind": "Poster", "price": "15 EUR", "url": "https://snask.com/product/extremely-right-poster/", "img": "https://snask.com/wp-content/uploads/2021/04/Poster-PP.jpg"}, "stay-pink-poster": {"title": "Stay Pink", "kind": "Poster", "price": "25 EUR", "url": "https://snask.com/product/poster-stay-pink/", "img": "https://snask.com/wp-content/uploads/2021/03/PP-Poster-Stay-Gold.jpg"}, "champagne-mugs": {"title": "Pink Champagne Mugs", "kind": "Handmade with Kaia Keramik", "price": "60 EUR", "url": "https://snask.com/product/snask-pink-champagne-mugs-handmade-by-kaia/", "img": "https://snask.com/wp-content/uploads/2023/10/kaia-x-snask-clean-image-2.jpg"}, "stickers": {"title": "Stickers Pack", "kind": "Stickers", "price": "10 EUR", "url": "https://snask.com/product/stickers-pack/", "img": ""}}};
+const CATALOG = {"case": {"hives-countdown": {"title": "Countdown to Shutdown", "client": "The Hives", "kind": "Music video", "blurb": "Corporate execs run the show while the band stays missing until the finale.", "url": "https://snask.com/case/the-hives-countdown-to-shutdown/", "img": "https://snask.com/wp-content/uploads/2023/06/thehives_0_web.png"}, "hives-enough": {"title": "Enough is Enough", "client": "The Hives", "kind": "Music video", "blurb": "The band alone in a boxing ring against a hostile crowd. No Rocky montages.", "url": "https://snask.com/case/the-hives-enough-is-enough/", "img": "https://snask.com/wp-content/uploads/2025/04/hives_thumb-1250x720.png"}, "viagra-boys": {"title": "Punk Rock Loser & Ain't No Thief", "client": "Viagra Boys", "kind": "Music videos", "blurb": "Two videos for the songs that open the album Cave World.", "url": "https://snask.com/case/viagra-boys-punk-rock-loser-aint-no-thief/", "img": "https://snask.com/wp-content/uploads/2022/04/00_viagra_boys_thumbnail-1.webp"}, "klarna-horse": {"title": "Long Haired Horse", "client": "Klarna", "kind": "Film", "blurb": "Part of Smoooth Situations: five handcrafted dream worlds.", "url": "https://snask.com/case/klarna-long-haired-horse/", "img": "https://snask.com/wp-content/uploads/2021/01/klarna_horse_thumbs2.png-1.webp"}, "klarna-smoooth": {"title": "Smoooth", "client": "Klarna", "kind": "Campaign", "blurb": "Film, photo and stills set in Klarna's heightened, smoooth lifestyle world.", "url": "https://snask.com/case/klarna-branded-content/", "img": "https://snask.com/wp-content/uploads/2021/04/SSP_HighHeeledCurling_Emotional_4x5-scaled.jpg"}, "love-korea": {"title": "Love Korea", "client": "ICON Magazine", "kind": "Rebrand", "blurb": "North Korea, rebranded around love. Free files, if they prove they're a democracy.", "url": "https://snask.com/case/north-korea-rebrand/", "img": "https://snask.com/wp-content/uploads/2018/09/northkorea.png"}, "shower-beer": {"title": "Shower Beer", "client": "SNASK", "kind": "Packaging & brand", "blurb": "Sweet but strong pale ale in a palm-friendly 18 cl bottle. Disco is dead.", "url": "https://snask.com/case/shower-beer/", "img": "https://snask.com/wp-content/uploads/2016/12/shower-beer_webthumb.png"}, "toggl": {"title": "Toggl rebrand", "client": "Toggl", "kind": "Rebrand", "blurb": "Three products, one brand: identity, logo, photos and films.", "url": "https://snask.com/case/toggl-rebrand-strategy-visual-identity-production/", "img": "https://snask.com/wp-content/uploads/2023/06/toggl_00_thumbnail.png"}, "xbox": {"title": "This is an Xbox", "client": "Xbox", "kind": "Film", "blurb": "One continuous flowing film of Xbox on every device in everyday life.", "url": "https://snask.com/case/xbox-this-is-an-xbox/", "img": "https://snask.com/wp-content/uploads/2024/11/02_xbox_still-1250x703.png"}, "curaprox": {"title": "House of Mouth", "client": "Curaprox", "kind": "Brand film", "blurb": "A surreal film where everything starts with the mouth.", "url": "https://snask.com/case/curaprox-house-of-mouth/", "img": "https://snask.com/wp-content/uploads/2026/04/house-of-mouth_2-2-3.jpg"}, "meta": {"title": "Personalization II", "client": "Meta", "kind": "Films", "blurb": "A yeti, a witch and a headless horseman explain your feed.", "url": "https://snask.com/case/meta-personalization-ii/", "img": "https://snask.com/wp-content/uploads/2025/09/meta_thumb.png"}, "cheezington": {"title": "Cheezington!", "client": "Oddlygood", "kind": "Campaign", "blurb": "Launch films for a vegan cheese with a very odd name.", "url": "https://snask.com/case/oddlygood-cheezington/", "img": "https://snask.com/wp-content/uploads/2024/10/20240625_oddlygood44826-1250x833.png"}, "fortnox": {"title": "Fortnox rebrand", "client": "Fortnox", "kind": "Rebrand", "blurb": "Bookkeeping software turned trusted hub for businesses and society.", "url": "https://snask.com/case/fortnox/", "img": "https://snask.com/wp-content/uploads/2022/08/00-Fortnox-Behance-Profile.jpg-1.webp"}, "schuh": {"title": "schuh rebrand", "client": "schuh", "kind": "Rebrand", "blurb": "UK shoe retailer, refocused from products to people.", "url": "https://snask.com/case/schuh-rebrand-of-uk-shoe-retailer/", "img": "https://snask.com/wp-content/uploads/2020/05/schuh_thumb2.png-1.webp"}, "spotify-dok": {"title": "Dok podcast identity", "client": "Spotify", "kind": "Identity", "blurb": "A flexible type system so any episode title fits on one line.", "url": "https://snask.com/case/spotify-doks-podcast-branding/", "img": "https://snask.com/wp-content/uploads/2021/05/spotify_thumb-1.webp"}, "ica-stop": {"title": "ICA Stop T\u00e4by", "client": "ICA", "kind": "Store & brand", "blurb": "A cluttered family grocery store turned food destination.", "url": "https://snask.com/case/ica-stop-taby-branding-concept-design-video/", "img": "https://snask.com/wp-content/uploads/2024/02/ica-stop_02_2x3.jpg"}, "lensway": {"title": "Lensway rebrand films", "client": "Lensway", "kind": "Stop motion", "blurb": "Eyewear brand rebuilt around eyes, bold colour and stop motion.", "url": "https://snask.com/case/lensway-rebrand-films/", "img": "https://snask.com/wp-content/uploads/2018/05/webthumb.png-1.webp"}, "oddlygood-foamy-barista-tasty-soygurt": {"title": "Foamy Barista & Tasty Soygurt", "client": "OddlyGood", "kind": "Campaign film", "blurb": "", "url": "https://snask.com/case/oddlygood-foamy-barista-tasty-soygurt/", "img": ""}, "vivantis": {"title": "Rebrand & concept", "client": "Vivantis", "kind": "Rebrand & film", "blurb": "", "url": "https://snask.com/case/vivantis/", "img": ""}, "5man-rebrand-packaging": {"title": "Rebrand & packaging", "client": "5MAN", "kind": "Packaging", "blurb": "", "url": "https://snask.com/case/5man-rebrand-packaging/", "img": ""}, "curaprox-brilliant-brush-head": {"title": "Brilliant Brush Head", "client": "Curaprox", "kind": "Campaign film", "blurb": "", "url": "https://snask.com/case/curaprox-brilliant-brush-head/", "img": ""}, "meta-storytime": {"title": "Storytime", "client": "Meta", "kind": "Film", "blurb": "", "url": "https://snask.com/case/meta-storytime/", "img": ""}, "films-for-meta-concept-direction-production": {"title": "Personalization", "client": "Meta", "kind": "Brand film", "blurb": "", "url": "https://snask.com/case/films-for-meta-concept-direction-production/", "img": ""}, "oddlygood-stay-odd": {"title": "Stay Odd!", "client": "Oddlygood", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/oddlygood-stay-odd/", "img": ""}, "fifth-third-bank-a-fifth-third-better": {"title": "A Fifth Third Better", "client": "Fifth Third Bank", "kind": "Brand film", "blurb": "", "url": "https://snask.com/case/fifth-third-bank-a-fifth-third-better/", "img": ""}, "bang-olufsen-creative-concept": {"title": "Creative concept", "client": "Bang & Olufsen", "kind": "Art direction & photo", "blurb": "", "url": "https://snask.com/case/bang-olufsen-creative-concept/", "img": ""}, "hamster": {"title": "Hamster", "client": "Hamster", "kind": "Design, film & photo", "blurb": "", "url": "https://snask.com/case/hamster/", "img": ""}, "wallbaby-naming-brand-strategy-tone-of-voice-visual-identity": {"title": "Naming, strategy & identity", "client": "Wallbaby", "kind": "Branding", "blurb": "", "url": "https://snask.com/case/wallbaby-naming-brand-strategy-tone-of-voice-visual-identity/", "img": ""}, "snask-x-loqi": {"title": "SNASK x LOQI", "client": "LOQI", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/snask-x-loqi/", "img": ""}, "klarna-smoooth-scenarios": {"title": "Brand identity content campaign", "client": "Klarna", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/klarna-smoooth-scenarios/", "img": ""}, "viagra-boys-aint-nice-creatures": {"title": "Ain't Nice & Creatures", "client": "Viagra Boys", "kind": "Music videos", "blurb": "", "url": "https://snask.com/case/viagra-boys-aint-nice-creatures/", "img": ""}, "kale-crave": {"title": "Kale & Crave identity", "client": "Kale & Crave", "kind": "Identity", "blurb": "", "url": "https://snask.com/case/kale-crave/", "img": ""}, "likemeat-campaign": {"title": "LikeMeat campaign", "client": "LikeMeat", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/likemeat-campaign/", "img": ""}, "badminton": {"title": "Badminton", "client": "SNASK", "kind": "Film", "blurb": "", "url": "https://snask.com/case/badminton/", "img": ""}, "snask-merch": {"title": "SNASK Merch", "client": "SNASK", "kind": "Merch", "blurb": "", "url": "https://snask.com/case/snask-merch/", "img": ""}, "idn-heal-the-world": {"title": "Heal the World", "client": "IDN", "kind": "Print", "blurb": "", "url": "https://snask.com/case/idn-heal-the-world/", "img": ""}, "noosa-yoghurt-full-on-tasty": {"title": "Full on Tasty!", "client": "Noosa Yoghurt", "kind": "Film", "blurb": "", "url": "https://snask.com/case/noosa-yoghurt-full-on-tasty/", "img": ""}, "hedvig-nice-insurance-for-nice-people": {"title": "Nice Insurance for Nice People", "client": "Hedvig", "kind": "Film", "blurb": "", "url": "https://snask.com/case/hedvig-nice-insurance-for-nice-people/", "img": ""}, "klarna-google-apple-pay": {"title": "Google & Apple Pay", "client": "Klarna", "kind": "Film", "blurb": "", "url": "https://snask.com/case/klarna-google-apple-pay/", "img": ""}, "slanted-34-extremely-right": {"title": "#34 Extremely Right?", "client": "Slanted", "kind": "Print", "blurb": "", "url": "https://snask.com/case/slanted-34-extremely-right/", "img": ""}, "turning-tables-sweden": {"title": "Turning Tables Sweden", "client": "Turning Tables Sweden", "kind": "Design", "blurb": "", "url": "https://snask.com/case/turning-tables-sweden/", "img": ""}, "holvi-bank-smarter-not-harder": {"title": "Bank smarter, not harder", "client": "Holvi", "kind": "Film", "blurb": "", "url": "https://snask.com/case/holvi-bank-smarter-not-harder/", "img": ""}, "klarna-smooth-scenarios": {"title": "Smoooth Scenarios", "client": "Klarna", "kind": "Film", "blurb": "", "url": "https://snask.com/case/klarna-smooth-scenarios/", "img": ""}, "brooklyn-brewery": {"title": "Brooklyn Brewery", "client": "Brooklyn Brewery", "kind": "Design & film", "blurb": "", "url": "https://snask.com/case/brooklyn-brewery/", "img": ""}, "umbrella": {"title": "Umbrella", "client": "Umbrella", "kind": "Branding", "blurb": "", "url": "https://snask.com/case/umbrella/", "img": ""}, "klarna-black-friday-content": {"title": "Black Friday content", "client": "Klarna", "kind": "Film", "blurb": "", "url": "https://snask.com/case/klarna-black-friday-content/", "img": ""}, "aim-by-mia": {"title": "AIM by Mia", "client": "AIM by Mia", "kind": "Design & film", "blurb": "", "url": "https://snask.com/case/aim-by-mia/", "img": ""}, "evry": {"title": "EVRY", "client": "EVRY", "kind": "Film", "blurb": "", "url": "https://snask.com/case/evry/", "img": ""}, "get-raw": {"title": "GET RAW", "client": "GET RAW", "kind": "Branding & packaging", "blurb": "", "url": "https://snask.com/case/get-raw/", "img": ""}, "sneakersnstuffadidas": {"title": "Sneakersnstuff + adidas", "client": "Sneakersnstuff + adidas", "kind": "Live action", "blurb": "", "url": "https://snask.com/case/sneakersnstuffadidas/", "img": ""}, "sneakersnstuffadidas-cozy-as-kittens": {"title": "Cozy as Kittens", "client": "Sneakersnstuff + adidas", "kind": "Film", "blurb": "", "url": "https://snask.com/case/sneakersnstuffadidas-cozy-as-kittens/", "img": ""}, "monki": {"title": "#monkifesto", "client": "Monki", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/monki/", "img": ""}, "axfood": {"title": "Axfood", "client": "Axfood", "kind": "Design & film", "blurb": "", "url": "https://snask.com/case/axfood/", "img": ""}, "froda": {"title": "Froda", "client": "Froda", "kind": "Branding & web", "blurb": "", "url": "https://snask.com/case/froda/", "img": ""}, "holvi-banking-for-makers-doers": {"title": "Banking for Makers & Doers", "client": "Holvi", "kind": "Design & film", "blurb": "", "url": "https://snask.com/case/holvi-banking-for-makers-doers/", "img": ""}, "kaibosh": {"title": "Kaibosh", "client": "Kaibosh", "kind": "Identity", "blurb": "", "url": "https://snask.com/case/kaibosh/", "img": ""}, "klarna-singles-day": {"title": "Culture Calendar", "client": "Klarna", "kind": "Film", "blurb": "", "url": "https://snask.com/case/klarna-singles-day/", "img": ""}, "wauw": {"title": "Wauw!", "client": "Wauw!", "kind": "Identity & packaging", "blurb": "", "url": "https://snask.com/case/wauw/", "img": ""}, "fazer": {"title": "Fazer", "client": "Fazer", "kind": "Print campaign", "blurb": "", "url": "https://snask.com/case/fazer/", "img": ""}, "kandima": {"title": "Kandima", "client": "Kandima", "kind": "Branding", "blurb": "", "url": "https://snask.com/case/kandima/", "img": ""}, "ubu-cosmetic-tools": {"title": "UBU cosmetic tools", "client": "UBU", "kind": "Live action", "blurb": "", "url": "https://snask.com/case/ubu-cosmetic-tools/", "img": ""}, "vag": {"title": "V\u00c4G", "client": "V\u00c4G", "kind": "Identity & packaging", "blurb": "", "url": "https://snask.com/case/vag/", "img": ""}, "target": {"title": "Target", "client": "Target", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/target/", "img": ""}, "hang-konsten-lagt": {"title": "Hang Art Low", "client": "H\u00e4ng Konsten L\u00e5gt", "kind": "Editorial", "blurb": "", "url": "https://snask.com/case/hang-konsten-lagt/", "img": ""}, "sabo-kombohus": {"title": "Kombohus", "client": "SABO", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/sabo-kombohus/", "img": ""}, "bord-13": {"title": "Bord 13", "client": "Bord 13", "kind": "Identity & interior", "blurb": "", "url": "https://snask.com/case/bord-13/", "img": ""}, "chill-out-wines": {"title": "Chill Out Wines", "client": "Chill Out", "kind": "Campaign", "blurb": "", "url": "https://snask.com/case/chill-out-wines/", "img": ""}, "kontroll": {"title": "Kontroll", "client": "Kontroll", "kind": "Editorial", "blurb": "", "url": "https://snask.com/case/kontroll/", "img": ""}, "nordea-markets-3": {"title": "Nordea Markets (print)", "client": "Nordea Markets", "kind": "Print & identity", "blurb": "", "url": "https://snask.com/case/nordea-markets-3/", "img": ""}, "pangpang-aight": {"title": "PangPang Aight", "client": "PangPang", "kind": "Branding & packaging", "blurb": "", "url": "https://snask.com/case/pangpang-aight/", "img": ""}, "printing-friends-issue-no-8": {"title": "Issue No. 8", "client": "Printing Friends", "kind": "Editorial", "blurb": "", "url": "https://snask.com/case/printing-friends-issue-no-8/", "img": ""}, "simris": {"title": "Simris", "client": "Simris", "kind": "Identity & packaging", "blurb": "", "url": "https://snask.com/case/simris/", "img": ""}, "the-washington-post": {"title": "The Washington Post", "client": "The Washington Post", "kind": "Editorial", "blurb": "", "url": "https://snask.com/case/the-washington-post/", "img": ""}, "malmofestivalen-2014": {"title": "Malm\u00f6 Festival 2014", "client": "Malm\u00f6 Festival", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/malmofestivalen-2014/", "img": ""}, "sabo-pt-4-shorter-showers": {"title": "Shorter Showers", "client": "SABO", "kind": "Film", "blurb": "", "url": "https://snask.com/case/sabo-pt-4-shorter-showers/", "img": ""}, "attention-craft": {"title": "Attention: Craft", "client": "Attention: Craft", "kind": "Identity & exhibition", "blurb": "", "url": "https://snask.com/case/attention-craft/", "img": ""}, "oumph": {"title": "Oumph!", "client": "Oumph!", "kind": "Identity & packaging", "blurb": "", "url": "https://snask.com/case/oumph/", "img": ""}, "hemslojden": {"title": "Swedish Handicraft Association", "client": "Hemsl\u00f6jden", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/hemslojden/", "img": ""}, "printing-friends-magazine-nr-7-resa": {"title": "Issue No. 7", "client": "Printing Friends", "kind": "Editorial", "blurb": "", "url": "https://snask.com/case/printing-friends-magazine-nr-7-resa/", "img": ""}, "yay-festival-2013-2": {"title": "YAY Festival 2013", "client": "YAY Festival", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/yay-festival-2013-2/", "img": ""}, "city-tunnel": {"title": "The City Tunnel", "client": "The City Tunnel", "kind": "Stop motion", "blurb": "", "url": "https://snask.com/case/city-tunnel/", "img": ""}, "pangpang-brewery": {"title": "PangPang Brewery", "client": "PangPang Brewery", "kind": "Identity & packaging", "blurb": "", "url": "https://snask.com/case/pangpang-brewery/", "img": ""}, "ssu": {"title": "SSU political youth party", "client": "SSU", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/ssu/", "img": ""}, "ahlens-2": {"title": "\u00c5hl\u00e9ns", "client": "\u00c5hl\u00e9ns", "kind": "Stop motion", "blurb": "", "url": "https://snask.com/case/ahlens-2/", "img": ""}, "allmannyttan-se": {"title": "I'm Harry", "client": "SABO", "kind": "Film", "blurb": "", "url": "https://snask.com/case/allmannyttan-se/", "img": ""}, "folkoperan-love-at-folkoperan": {"title": "Love at Folkoperan", "client": "Folkoperan", "kind": "Stop motion", "blurb": "", "url": "https://snask.com/case/folkoperan-love-at-folkoperan/", "img": ""}, "calexicos": {"title": "Calexico's", "client": "Calexico's", "kind": "Print & identity", "blurb": "", "url": "https://snask.com/case/calexicos/", "img": ""}, "national-association-of-swedish-handicraft-societies": {"title": "Swedish Handicraft Association (national)", "client": "Hemsl\u00f6jden", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/national-association-of-swedish-handicraft-societies/", "img": ""}, "dans": {"title": "Dans <3 Stockholm", "client": "Dans <3 Stockholm", "kind": "Identity & editorial", "blurb": "", "url": "https://snask.com/case/dans/", "img": ""}, "almega-pt-3-copy-machine": {"title": "Copy Machine", "client": "Almega", "kind": "Film", "blurb": "", "url": "https://snask.com/case/almega-pt-3-copy-machine/", "img": ""}, "mobiento-mobile-agency": {"title": "Mobiento", "client": "Mobiento", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/mobiento-mobile-agency/", "img": ""}, "malmofestival-2013": {"title": "Malm\u00f6 Festival 2013", "client": "Malm\u00f6 Festival", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/malmofestival-2013/", "img": ""}, "sabo": {"title": "SABO", "client": "SABO", "kind": "Branding & campaign", "blurb": "", "url": "https://snask.com/case/sabo/", "img": ""}, "offf-lille": {"title": "OFFF Lille 2012", "client": "OFFF Lille", "kind": "Live action", "blurb": "", "url": "https://snask.com/case/offf-lille/", "img": ""}, "forsakringskassan": {"title": "F\u00f6rs\u00e4kringskassan", "client": "F\u00f6rs\u00e4kringskassan", "kind": "Stop motion", "blurb": "", "url": "https://snask.com/case/forsakringskassan/", "img": ""}, "nordea-markets-2": {"title": "Nordea Markets (film)", "client": "Nordea Markets", "kind": "Live action", "blurb": "", "url": "https://snask.com/case/nordea-markets-2/", "img": ""}, "snask-loves-film": {"title": "Snask Loves Film", "client": "SNASK", "kind": "Stop motion", "blurb": "", "url": "https://snask.com/case/snask-loves-film/", "img": ""}, "vadestra": {"title": "Vadestra", "client": "Vadestra", "kind": "Editorial", "blurb": "", "url": "https://snask.com/case/vadestra/", "img": ""}, "meatpacking-district": {"title": "Meatpacking District", "client": "Meatpacking District", "kind": "Editorial", "blurb": "", "url": "https://snask.com/case/meatpacking-district/", "img": ""}, "yay-festival-2013": {"title": "YAY Festival 2012", "client": "YAY Festival", "kind": "Identity & web", "blurb": "", "url": "https://snask.com/case/yay-festival-2013/", "img": ""}, "metro-save-my-day": {"title": "Save My Day", "client": "Metro", "kind": "Film", "blurb": "", "url": "https://snask.com/case/metro-save-my-day/", "img": ""}, "liljevalchs": {"title": "Hemsl\u00f6jden at Liljevalchs", "client": "Liljevalchs", "kind": "Identity & exhibition", "blurb": "", "url": "https://snask.com/case/liljevalchs/", "img": ""}}, "shop": {"pink-lies-jumper": {"title": "Pink Lies Jumper", "kind": "Unisex jumper", "price": "129 EUR", "url": "https://snask.com/product/pink-lies-jumper/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-LIES.jpg"}, "book": {"title": "Make Enemies & Gain Fans", "kind": "Book, 3rd and final edition", "price": "36 EUR", "url": "https://snask.com/product/make-enemies-gain-fans-3rd-and-final-edition-in-holographic-cover/", "img": "https://snask.com/wp-content/uploads/2024/11/snask_ncover_hori.jpg"}, "snask-off-tee": {"title": "SNASK Off! T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/snask-off-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-SNASK-OFF-TS-01.jpg"}, "pink-tiger-tee": {"title": "Pink Tiger T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/pink-tiger-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-TIGER.jpg"}, "extremely-right-poster": {"title": "Just Because You Are Extremely Right Doesn't Mean You Are Correct", "kind": "Poster", "price": "15 EUR", "url": "https://snask.com/product/extremely-right-poster/", "img": "https://snask.com/wp-content/uploads/2021/04/Poster-PP.jpg"}, "stay-pink-poster": {"title": "Stay Pink", "kind": "Poster", "price": "25 EUR", "url": "https://snask.com/product/poster-stay-pink/", "img": "https://snask.com/wp-content/uploads/2021/03/PP-Poster-Stay-Gold.jpg"}, "champagne-mugs": {"title": "Pink Champagne Mugs", "kind": "Handmade with Kaia Keramik", "price": "60 EUR", "url": "https://snask.com/product/snask-pink-champagne-mugs-handmade-by-kaia/", "img": "https://snask.com/wp-content/uploads/2023/10/kaia-x-snask-clean-image-2.jpg"}, "stickers": {"title": "Stickers Pack", "kind": "Stickers", "price": "10 EUR", "url": "https://snask.com/product/stickers-pack/", "img": ""}}};
+const MODES = {"classic": {"label": "Classic", "instruction": ""}, "honest": {"label": "Brutally honest", "instruction": "MODE: Brutally honest. Drop the sugar. Short, blunt, devastatingly funny critique. Merciless to ideas, beige and bureaucrazy, never cruel to people."}, "svenska": {"label": "Svenska", "instruction": "MODE: Svenska. Answer in Swedish whatever language the visitor writes in. Stockholm slang welcome."}, "toast": {"label": "Wedding toast", "instruction": "MODE: Wedding toast. Phrase every answer as an over-the-top, heartfelt punk wedding toast (raise your glasses, tears, love). Still answer the question. Max 120 words."}};
 const EXTRA_STARTERS = [
   "Show me your best music videos",
   "What should I buy my mum in the shop?",
@@ -444,12 +542,17 @@ const CANNED = {
   "Most SNASK thing in the shop?": "The Pink Lies Jumper, or the poster you hang above your boss's desk. Prices from when I last checked the [shop](https://snask.com/shop/).\n[[shop:pink-lies-jumper]]\n[[shop:extremely-right-poster]]\n[[ask:What should I buy my mum in the shop?]]",
 };
 
+const ROAST_LABEL = "Roast my logo";
 const $ = (id) => document.getElementById(id);
 const app = $("app"), chat = $("chat"), box = $("box"), form = $("form"), sendBtn = $("send"), modeEl = $("mode"), modeText = $("mode-text");
 let turns = [];
 let ctl = null;
 let sample = null;
 let live = false;
+let mode = "classic";
+let imagesOk = false;   // can this view send an image to Claude?
+let attached = null;    // { blob, url, base64, media_type }
+let downloads = null;   // artifact-only: lets the viewer save the poster
 
 function esc(s) { return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 function fmt(s) {
@@ -467,6 +570,9 @@ function renderReply(b, raw, done) {
   const cards = [], asks = [];
   text = text.replace(/\[\[(case|shop):([a-z0-9-]+)\]\]/g, (m, kind, id) => { if (CATALOG[kind] && CATALOG[kind][id] && cards.length < 3) cards.push([kind, id]); return ""; });
   text = text.replace(/\[\[ask:([^\]\n]{1,90})\]\]/g, (m, q) => { if (asks.length < 3) asks.push(q.trim()); return ""; });
+  let wantsBrief = false;
+  text = text.replace(/\[\[brief\]\]/g, () => { wantsBrief = true; return ""; });
+  text = text.replace(/\[\[[a-z]+:[^\]]*\]\]/g, "");
   text = text.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   b.innerHTML = fmt(text);
   if (cards.length) {
@@ -489,6 +595,8 @@ function renderReply(b, raw, done) {
     });
     b.append(wrap);
   }
+  if (done && wantsBrief) b.append(briefForm());
+  if (done && text) addReplyTools(b, text);
 }
 function card(kind, c, i) {
   const a = document.createElement("a");
@@ -522,6 +630,204 @@ function card(kind, c, i) {
   a.append(thumb, meta);
   return a;
 }
+// ── modes ──
+function renderModes() {
+  const el = $("modes");
+  el.innerHTML = "";
+  for (const [key, m] of Object.entries(MODES)) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mode-btn";
+    btn.textContent = m.label;
+    btn.setAttribute("aria-pressed", String(key === mode));
+    btn.onclick = () => { mode = key; burst(btn); renderModes(); box.focus(); };
+    el.append(btn);
+  }
+}
+
+// ── poster ──
+function addReplyTools(b, text) {
+  const msg = b.parentElement;
+  if (msg.querySelector(".reply-tools")) return;
+  const tools = document.createElement("div");
+  tools.className = "reply-tools";
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.textContent = "Make it a poster";
+  btn.onclick = () => openPoster(msg.dataset.question || "", text);
+  tools.append(btn);
+  msg.append(tools);
+}
+function plain(s) {
+  return s.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*|\*/g, "").replace(/\n{2,}/g, "\n").trim();
+}
+function wrapLines(ctx, text, maxW) {
+  const lines = [];
+  for (const para of text.split("\n")) {
+    let line = "";
+    for (const word of para.split(/\s+/)) {
+      const test = line ? line + " " + word : word;
+      if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = word; } else line = test;
+    }
+    lines.push(line);
+  }
+  return lines;
+}
+let posterBlob = null;
+async function openPoster(question, answer) {
+  const c = $("poster-canvas"), ctx = c.getContext("2d");
+  const W = 1080, H = 1350, M = 84;
+  const css = getComputedStyle(document.documentElement);
+  const pink = css.getPropertyValue("--pink").trim(), ink = css.getPropertyValue("--ink").trim(), hot = css.getPropertyValue("--hot").trim(), paper = css.getPropertyValue("--paper").trim();
+  try { await Promise.all([document.fonts.load('900 100px "Archivo"'), document.fonts.load('italic 60px "Instrument Serif"')]); } catch {}
+  ctx.fontStretch = "normal";
+  ctx.fillStyle = pink; ctx.fillRect(0, 0, W, H);
+  // ticker band
+  ctx.fillStyle = ink; ctx.fillRect(0, 0, W, 86);
+  ctx.fillStyle = pink; ctx.font = '800 30px "Archivo", sans-serif';
+  try { ctx.fontStretch = "expanded"; } catch {}
+  ctx.textBaseline = "middle";
+  ctx.fillText("SNASK OFF!  ✶  WE ARE YOUR FUTURE ROMANCE  ✶  STAY PINK  ✶", 30, 45);
+  // question
+  ctx.textBaseline = "alphabetic";
+  let y = 190;
+  if (question) {
+    ctx.fillStyle = ink; ctx.font = '800 26px "Archivo", sans-serif';
+    ctx.fillText("YOU ASKED", M, y);
+    try { ctx.fontStretch = "normal"; } catch {}
+    ctx.font = 'italic 46px "Instrument Serif", Georgia, serif';
+    const ql = wrapLines(ctx, "“" + question + "”", W - 2 * M).slice(0, 2);
+    ql.forEach((l, i) => ctx.fillText(l, M, y + 58 + i * 52));
+    y += 58 + ql.length * 52 + 40;
+  }
+  // answer, sized to fit
+  try { ctx.fontStretch = "normal"; } catch {}
+  let body = plain(answer);
+  if (body.length > 420) body = body.slice(0, 410).replace(/\s+\S*$/, "") + "…";
+  const bottom = H - 260;
+  let size = 78, lines;
+  for (; size >= 34; size -= 3) {
+    ctx.font = `800 ${size}px "Archivo", sans-serif`;
+    lines = wrapLines(ctx, body, W - 2 * M);
+    if (y + lines.length * size * 1.12 <= bottom) break;
+  }
+  ctx.fillStyle = ink;
+  lines.forEach((l, i) => ctx.fillText(l, M, y + size + i * size * 1.12));
+  // wordmark
+  ctx.font = '900 130px "Archivo", sans-serif';
+  try { ctx.fontStretch = "expanded"; } catch {}
+  const base = H - 100;
+  ctx.fillStyle = ink; ctx.fillText("SNASK", M - 6, base);
+  const w1 = ctx.measureText("SNASK").width;
+  ctx.lineWidth = 6; ctx.strokeStyle = ink; ctx.fillStyle = paper;
+  ctx.strokeText("BOT", M - 6 + w1, base); ctx.fillText("BOT", M - 6 + w1, base);
+  ctx.fillStyle = hot; ctx.font = '120px "Archivo", sans-serif';
+  ctx.fillText("♥", W - M - 90, base);
+  try { ctx.fontStretch = "normal"; } catch {}
+  ctx.fillStyle = ink; ctx.font = '600 24px "Archivo", sans-serif';
+  ctx.fillText("snask.com · unofficial SNASKBOT prototype", M, H - 48);
+  posterBlob = await new Promise((r) => c.toBlob(r, "image/png"));
+  const file = posterBlob && new File([posterBlob], "snaskbot-poster.png", { type: "image/png" });
+  $("poster-share").hidden = !(file && navigator.canShare && navigator.canShare({ files: [file] }));
+  $("poster-save").hidden = MODE !== "server" && !downloads;
+  $("poster-note").textContent = "";
+  $("poster").hidden = false;
+}
+$("poster-close").onclick = () => { $("poster").hidden = true; };
+$("poster").addEventListener("click", (e) => { if (e.target.id === "poster") $("poster").hidden = true; });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("poster").hidden) { e.stopPropagation(); $("poster").hidden = true; } }, true);
+$("poster-save").onclick = async () => {
+  if (!posterBlob) return;
+  if (MODE === "server") {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(posterBlob);
+    a.download = "snaskbot-poster.png";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    return;
+  }
+  try { await downloads.save({ filename: "snaskbot-poster.png", data: posterBlob }); $("poster-note").textContent = "Saved. Stay pink."; }
+  catch (e) { $("poster-note").textContent = e && e.code === "declined" ? "" : "Couldn't save it here."; }
+};
+$("poster-share").onclick = async () => {
+  try { await navigator.share({ files: [new File([posterBlob], "snaskbot-poster.png", { type: "image/png" })], text: "SNASKBOT says" }); } catch {}
+};
+
+// ── brief form ──
+function briefForm() {
+  const f = document.createElement("form");
+  f.className = "brief";
+  f.innerHTML = `<h3>Got a real project?</h3>
+    <p>Tell SNASK what you're up to. Short is fine.</p>
+    <div class="row"><label>Your name<input name="name" required maxlength="100" autocomplete="name"></label>
+    <label>Email<input name="email" type="email" required maxlength="200" autocomplete="email"></label></div>
+    <div class="row"><label>Company<input name="company" maxlength="120" autocomplete="organization"></label>
+    <label>Budget<select name="budget"><option value="">Pick one</option><option>Under 10k EUR</option><option>10–50k EUR</option><option>50–150k EUR</option><option>150k EUR +</option><option>No idea yet</option></select></label></div>
+    <label>What do you need?<textarea name="project" required minlength="10" maxlength="2000" placeholder="Rebrand, film, packaging, a music video…"></textarea></label>
+    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit">Send the brief</button>
+    <span class="err" role="alert"></span>`;
+  f.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const data = Object.fromEntries(new FormData(f));
+    const btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = "Sending…";
+    let delivered = false;
+    if (MODE === "server") {
+      try {
+        const r = await fetch("/api/brief", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) { f.querySelector(".err").textContent = j.code === "invalid_request" ? "Check your name, email and a few words about the project." : "Couldn't send it. Try again in a bit."; btn.disabled = false; btn.textContent = "Send the brief"; return; }
+        delivered = !!j.delivered;
+      } catch { f.querySelector(".err").textContent = "Couldn't send it. Try again in a bit."; btn.disabled = false; btn.textContent = "Send the brief"; return; }
+    }
+    if (delivered) { f.innerHTML = "<h3>Sent. Love is in the air.</h3><p>SNASK has your brief and will get back to you.</p>"; burst(f); return; }
+    const summary = `Name: ${data.name}\nEmail: ${data.email}\nCompany: ${data.company || "-"}\nBudget: ${data.budget || "-"}\n\n${data.project}`;
+    f.innerHTML = `<h3>Almost there</h3><p>This prototype doesn't send briefs yet. Copy it and email it to help@snask.com.</p><pre></pre><button type="button" class="copy">Copy brief</button>`;
+    f.querySelector("pre").textContent = summary;
+    const copy = f.querySelector(".copy");
+    copy.onclick = async () => {
+      try { await navigator.clipboard.writeText("To: help@snask.com\n\n" + summary); copy.textContent = "Copied"; }
+      catch { const r = document.createRange(); r.selectNodeContents(f.querySelector("pre")); getSelection().removeAllRanges(); getSelection().addRange(r); copy.textContent = "Selected, press copy"; }
+    };
+  });
+  return f;
+}
+
+// ── images (roast my logo) ──
+async function shrinkImage(file) {
+  const bmp = await createImageBitmap(file);
+  const scale = Math.min(1, 1024 / Math.max(bmp.width, bmp.height));
+  const cv = document.createElement("canvas");
+  cv.width = Math.round(bmp.width * scale); cv.height = Math.round(bmp.height * scale);
+  const cx = cv.getContext("2d");
+  cx.fillStyle = "#ffffff"; cx.fillRect(0, 0, cv.width, cv.height);
+  cx.drawImage(bmp, 0, 0, cv.width, cv.height);
+  const blob = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.85));
+  const url = cv.toDataURL("image/jpeg", 0.85);
+  return { blob, url, base64: url.split(",")[1], media_type: "image/jpeg" };
+}
+function setAttached(a) {
+  attached = a;
+  $("preview").hidden = !a;
+  if (a) $("preview-img").src = a.url;
+  box.placeholder = a ? "Add a note, or just hit send" : TEASERS[0];
+}
+function enableImages() {
+  imagesOk = true;
+  $("clip").hidden = false;
+  renderChips();
+}
+$("clip").onclick = () => $("file").click();
+$("file").onchange = async () => {
+  const f = $("file").files[0];
+  $("file").value = "";
+  if (!f) return;
+  try { setAttached(await shrinkImage(f)); box.focus(); }
+  catch { setAttached(null); }
+};
+$("preview-x").onclick = () => setAttached(null);
+
 function scrollDown() { chat.scrollTop = chat.scrollHeight; }
 function bubble(role, html) {
   const wrap = document.createElement("div");
@@ -557,6 +863,15 @@ function buildTicker() {
 function renderChips() {
   const chips = $("chips");
   chips.innerHTML = "";
+  if (imagesOk) {
+    const r = document.createElement("button");
+    r.type = "button";
+    r.className = "chip roast";
+    r.textContent = ROAST_LABEL + " ↑";
+    r.style.setProperty("--i", 0);
+    r.onclick = () => $("file").click();
+    chips.append(r);
+  }
   [...STARTERS, ...EXTRA_STARTERS].forEach((s, i) => {
     const c = document.createElement("button");
     c.type = "button";
@@ -632,37 +947,65 @@ function copyFor(code) {
   }
 }
 
-async function callClaude(onText, signal) {
+async function callClaude(onText, signal, image) {
   const history = turns.slice(-20);
   if (MODE === "server") {
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ messages: history }),
+      body: JSON.stringify({ messages: history, mode, image: image ? { media_type: image.media_type, data: image.base64 } : undefined }),
       signal,
     });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw { code: data.code || "upstream_error" };
-    onText(data.text);
-    return data.text;
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw { code: data.code || "upstream_error" };
+    }
+    // The reply streams in as plain text.
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let text = "";
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      text += dec.decode(value, { stream: true });
+      onText(text);
+    }
+    const err = text.match(/\n?\[\[error:([a-z_]+)\]\]\s*$/);
+    if (err) throw { code: err[1], text: text.slice(0, err.index) || undefined };
+    return text;
   }
+  const rules = PERSONA + (MODES[mode] && MODES[mode].instruction ? "\n\n" + MODES[mode].instruction : "");
   const input = [
-    { role: "user", content: "Instructions for this whole chat. You are playing a character; stay in it.\n\n" + PERSONA + "\n\nThe visitor's messages follow." },
+    { role: "user", content: "Instructions for this whole chat. You are playing a character; stay in it.\n\n" + rules + "\n\nThe visitor's messages follow." },
     ...history,
   ];
-  const { text } = await sample(input, { cache: false, modelTier: "quick", signal, onText: ({ text }) => onText(text) });
+  const opts = { cache: false, modelTier: "quick", signal, onText: ({ text }) => onText(text) };
+  if (image) opts.images = [image.blob];
+  const { text } = await sample(input, opts);
   return text;
 }
 
 async function ask(text) {
   text = text.trim();
+  const image = attached;
+  if (image && !live) { setAttached(null); }
+  if (image && live && !text) text = "Roast my logo, please.";
   if (!text) { form.classList.remove("shake"); void form.offsetWidth; form.classList.add("shake"); return; }
   if (ctl) return;
   app.classList.add("chatting");
   sendBtn.classList.remove("fly"); void sendBtn.offsetWidth; sendBtn.classList.add("fly");
-  bubble("user", fmt(text));
-  turns.push({ role: "user", content: text });
+  const ub = bubble("user", fmt(text));
+  if (image && live) {
+    const im = document.createElement("img");
+    im.className = "sent";
+    im.src = image.url;
+    im.alt = "Your image";
+    ub.prepend(im);
+    setAttached(null);
+  }
+  turns.push({ role: "user", content: image && live ? text + "\n(I attached an image for you to roast.)" : text });
   const b = bubble("assistant", DOTS);
+  b.parentElement.dataset.question = text;
 
   if (!live) {
     const reply = CANNED[text] || "I'm in offline mode right now, so I can only answer the starter questions. Open me inside Claude to unleash the full chat.";
@@ -674,7 +1017,7 @@ async function ask(text) {
   ctl = new AbortController();
   setBusy(true);
   try {
-    const reply = await callClaude((t) => { renderReply(b, t, false); scrollDown(); }, ctl.signal);
+    const reply = await callClaude((t) => { renderReply(b, t, false); scrollDown(); }, ctl.signal, image && live ? image : null);
     renderReply(b, reply, true);
     scrollDown();
     turns.push({ role: "assistant", content: reply });
@@ -725,6 +1068,7 @@ function autosize() { box.style.height = "auto"; box.style.height = Math.min(box
 box.addEventListener("input", autosize);
 $("reset").addEventListener("click", () => {
   if (ctl) ctl.abort();
+  setAttached(null);
   turns = [];
   chat.innerHTML = "";
   app.classList.remove("chatting");
@@ -735,11 +1079,26 @@ buildTicker();
 renderChips();
 tease();
 
+renderModes();
+
 (async () => {
-  if (MODE === "server") { setLive(true, "Live · powered by Claude"); return; }
+  if (MODE === "server") {
+    setLive(true, "Live · powered by Claude");
+    enableImages();
+    // Fresh project and shop cards (the shop is read live from snask.com).
+    try {
+      const fresh = await (await fetch("/api/catalog")).json();
+      if (fresh && fresh.case) Object.assign(CATALOG.case, fresh.case);
+      if (fresh && fresh.shop && Object.keys(fresh.shop).length) CATALOG.shop = { ...CATALOG.shop, ...fresh.shop };
+    } catch {}
+    return;
+  }
   try { sample = window.claude ? await window.claude.use("sample") : null; } catch { sample = null; }
-  if (sample) setLive(true, "Live · powered by Claude");
-  else goOffline();
+  if (sample) {
+    setLive(true, "Live · powered by Claude");
+    try { const lim = await sample.limits(); if (lim && lim.images) enableImages(); } catch {}
+  } else goOffline();
+  try { downloads = window.claude ? await window.claude.use("downloads") : null; } catch { downloads = null; }
 })();
 </script>
 

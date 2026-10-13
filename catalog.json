@@ -1,31 +1,878 @@
 {
-  "case": {
-    "hives-countdown": { "title": "Countdown to Shutdown", "client": "The Hives", "kind": "Music video", "blurb": "Corporate execs run the show while the band stays missing until the finale.", "url": "https://snask.com/case/the-hives-countdown-to-shutdown/", "img": "https://snask.com/wp-content/uploads/2023/06/thehives_0_web.png" },
-    "hives-enough": { "title": "Enough is Enough", "client": "The Hives", "kind": "Music video", "blurb": "The band alone in a boxing ring against a hostile crowd. No Rocky montages.", "url": "https://snask.com/case/the-hives-enough-is-enough/", "img": "https://snask.com/wp-content/uploads/2025/04/hives_thumb-1250x720.png" },
-    "viagra-boys": { "title": "Punk Rock Loser & Ain't No Thief", "client": "Viagra Boys", "kind": "Music videos", "blurb": "Two videos for the songs that open the album Cave World.", "url": "https://snask.com/case/viagra-boys-punk-rock-loser-aint-no-thief/", "img": "https://snask.com/wp-content/uploads/2022/04/00_viagra_boys_thumbnail-1.webp" },
-    "klarna-horse": { "title": "Long Haired Horse", "client": "Klarna", "kind": "Film", "blurb": "Part of Smoooth Situations: five handcrafted dream worlds.", "url": "https://snask.com/case/klarna-long-haired-horse/", "img": "https://snask.com/wp-content/uploads/2021/01/klarna_horse_thumbs2.png-1.webp" },
-    "klarna-smoooth": { "title": "Smoooth", "client": "Klarna", "kind": "Campaign", "blurb": "Film, photo and stills set in Klarna's heightened, smoooth lifestyle world.", "url": "https://snask.com/case/klarna-branded-content/", "img": "https://snask.com/wp-content/uploads/2021/04/SSP_HighHeeledCurling_Emotional_4x5-scaled.jpg" },
-    "love-korea": { "title": "Love Korea", "client": "ICON Magazine", "kind": "Rebrand", "blurb": "North Korea, rebranded around love. Free files, if they prove they're a democracy.", "url": "https://snask.com/case/north-korea-rebrand/", "img": "https://snask.com/wp-content/uploads/2018/09/northkorea.png" },
-    "shower-beer": { "title": "Shower Beer", "client": "SNASK", "kind": "Packaging & brand", "blurb": "Sweet but strong pale ale in a palm-friendly 18 cl bottle. Disco is dead.", "url": "https://snask.com/case/shower-beer/", "img": "https://snask.com/wp-content/uploads/2016/12/shower-beer_webthumb.png" },
-    "toggl": { "title": "Toggl rebrand", "client": "Toggl", "kind": "Rebrand", "blurb": "Three products, one brand: identity, logo, photos and films.", "url": "https://snask.com/case/toggl-rebrand-strategy-visual-identity-production/", "img": "https://snask.com/wp-content/uploads/2023/06/toggl_00_thumbnail.png" },
-    "xbox": { "title": "This is an Xbox", "client": "Xbox", "kind": "Film", "blurb": "One continuous flowing film of Xbox on every device in everyday life.", "url": "https://snask.com/case/xbox-this-is-an-xbox/", "img": "https://snask.com/wp-content/uploads/2024/11/02_xbox_still-1250x703.png" },
-    "curaprox": { "title": "House of Mouth", "client": "Curaprox", "kind": "Brand film", "blurb": "A surreal film where everything starts with the mouth.", "url": "https://snask.com/case/curaprox-house-of-mouth/", "img": "https://snask.com/wp-content/uploads/2026/04/house-of-mouth_2-2-3.jpg" },
-    "meta": { "title": "Personalization II", "client": "Meta", "kind": "Films", "blurb": "A yeti, a witch and a headless horseman explain your feed.", "url": "https://snask.com/case/meta-personalization-ii/", "img": "https://snask.com/wp-content/uploads/2025/09/meta_thumb.png" },
-    "cheezington": { "title": "Cheezington!", "client": "Oddlygood", "kind": "Campaign", "blurb": "Launch films for a vegan cheese with a very odd name.", "url": "https://snask.com/case/oddlygood-cheezington/", "img": "https://snask.com/wp-content/uploads/2024/10/20240625_oddlygood44826-1250x833.png" },
-    "fortnox": { "title": "Fortnox rebrand", "client": "Fortnox", "kind": "Rebrand", "blurb": "Bookkeeping software turned trusted hub for businesses and society.", "url": "https://snask.com/case/fortnox/", "img": "https://snask.com/wp-content/uploads/2022/08/00-Fortnox-Behance-Profile.jpg-1.webp" },
-    "schuh": { "title": "schuh rebrand", "client": "schuh", "kind": "Rebrand", "blurb": "UK shoe retailer, refocused from products to people.", "url": "https://snask.com/case/schuh-rebrand-of-uk-shoe-retailer/", "img": "https://snask.com/wp-content/uploads/2020/05/schuh_thumb2.png-1.webp" },
-    "spotify-dok": { "title": "Dok podcast identity", "client": "Spotify", "kind": "Identity", "blurb": "A flexible type system so any episode title fits on one line.", "url": "https://snask.com/case/spotify-doks-podcast-branding/", "img": "https://snask.com/wp-content/uploads/2021/05/spotify_thumb-1.webp" },
-    "ica-stop": { "title": "ICA Stop Täby", "client": "ICA", "kind": "Store & brand", "blurb": "A cluttered family grocery store turned food destination.", "url": "https://snask.com/case/ica-stop-taby-branding-concept-design-video/", "img": "https://snask.com/wp-content/uploads/2024/02/ica-stop_02_2x3.jpg" },
-    "lensway": { "title": "Lensway rebrand films", "client": "Lensway", "kind": "Stop motion", "blurb": "Eyewear brand rebuilt around eyes, bold colour and stop motion.", "url": "https://snask.com/case/lensway-rebrand-films/", "img": "https://snask.com/wp-content/uploads/2018/05/webthumb.png-1.webp" }
+ "case": {
+  "hives-countdown": {
+   "title": "Countdown to Shutdown",
+   "client": "The Hives",
+   "kind": "Music video",
+   "blurb": "Corporate execs run the show while the band stays missing until the finale.",
+   "url": "https://snask.com/case/the-hives-countdown-to-shutdown/",
+   "img": "https://snask.com/wp-content/uploads/2023/06/thehives_0_web.png"
   },
-  "shop": {
-    "pink-lies-jumper": { "title": "Pink Lies Jumper", "kind": "Unisex jumper", "price": "129 EUR", "url": "https://snask.com/product/pink-lies-jumper/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-LIES.jpg" },
-    "book": { "title": "Make Enemies & Gain Fans", "kind": "Book, 3rd and final edition", "price": "36 EUR", "url": "https://snask.com/product/make-enemies-gain-fans-3rd-and-final-edition-in-holographic-cover/", "img": "https://snask.com/wp-content/uploads/2024/11/snask_ncover_hori.jpg" },
-    "snask-off-tee": { "title": "SNASK Off! T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/snask-off-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-SNASK-OFF-TS-01.jpg" },
-    "pink-tiger-tee": { "title": "Pink Tiger T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/pink-tiger-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-TIGER.jpg" },
-    "extremely-right-poster": { "title": "Just Because You Are Extremely Right Doesn't Mean You Are Correct", "kind": "Poster", "price": "15 EUR", "url": "https://snask.com/product/extremely-right-poster/", "img": "https://snask.com/wp-content/uploads/2021/04/Poster-PP.jpg" },
-    "stay-pink-poster": { "title": "Stay Pink", "kind": "Poster", "price": "25 EUR", "url": "https://snask.com/product/poster-stay-pink/", "img": "https://snask.com/wp-content/uploads/2021/03/PP-Poster-Stay-Gold.jpg" },
-    "champagne-mugs": { "title": "Pink Champagne Mugs", "kind": "Handmade with Kaia Keramik", "price": "60 EUR", "url": "https://snask.com/product/snask-pink-champagne-mugs-handmade-by-kaia/", "img": "https://snask.com/wp-content/uploads/2023/10/kaia-x-snask-clean-image-2.jpg" },
-    "stickers": { "title": "Stickers Pack", "kind": "Stickers", "price": "10 EUR", "url": "https://snask.com/product/stickers-pack/", "img": "" }
+  "hives-enough": {
+   "title": "Enough is Enough",
+   "client": "The Hives",
+   "kind": "Music video",
+   "blurb": "The band alone in a boxing ring against a hostile crowd. No Rocky montages.",
+   "url": "https://snask.com/case/the-hives-enough-is-enough/",
+   "img": "https://snask.com/wp-content/uploads/2025/04/hives_thumb-1250x720.png"
+  },
+  "viagra-boys": {
+   "title": "Punk Rock Loser & Ain't No Thief",
+   "client": "Viagra Boys",
+   "kind": "Music videos",
+   "blurb": "Two videos for the songs that open the album Cave World.",
+   "url": "https://snask.com/case/viagra-boys-punk-rock-loser-aint-no-thief/",
+   "img": "https://snask.com/wp-content/uploads/2022/04/00_viagra_boys_thumbnail-1.webp"
+  },
+  "klarna-horse": {
+   "title": "Long Haired Horse",
+   "client": "Klarna",
+   "kind": "Film",
+   "blurb": "Part of Smoooth Situations: five handcrafted dream worlds.",
+   "url": "https://snask.com/case/klarna-long-haired-horse/",
+   "img": "https://snask.com/wp-content/uploads/2021/01/klarna_horse_thumbs2.png-1.webp"
+  },
+  "klarna-smoooth": {
+   "title": "Smoooth",
+   "client": "Klarna",
+   "kind": "Campaign",
+   "blurb": "Film, photo and stills set in Klarna's heightened, smoooth lifestyle world.",
+   "url": "https://snask.com/case/klarna-branded-content/",
+   "img": "https://snask.com/wp-content/uploads/2021/04/SSP_HighHeeledCurling_Emotional_4x5-scaled.jpg"
+  },
+  "love-korea": {
+   "title": "Love Korea",
+   "client": "ICON Magazine",
+   "kind": "Rebrand",
+   "blurb": "North Korea, rebranded around love. Free files, if they prove they're a democracy.",
+   "url": "https://snask.com/case/north-korea-rebrand/",
+   "img": "https://snask.com/wp-content/uploads/2018/09/northkorea.png"
+  },
+  "shower-beer": {
+   "title": "Shower Beer",
+   "client": "SNASK",
+   "kind": "Packaging & brand",
+   "blurb": "Sweet but strong pale ale in a palm-friendly 18 cl bottle. Disco is dead.",
+   "url": "https://snask.com/case/shower-beer/",
+   "img": "https://snask.com/wp-content/uploads/2016/12/shower-beer_webthumb.png"
+  },
+  "toggl": {
+   "title": "Toggl rebrand",
+   "client": "Toggl",
+   "kind": "Rebrand",
+   "blurb": "Three products, one brand: identity, logo, photos and films.",
+   "url": "https://snask.com/case/toggl-rebrand-strategy-visual-identity-production/",
+   "img": "https://snask.com/wp-content/uploads/2023/06/toggl_00_thumbnail.png"
+  },
+  "xbox": {
+   "title": "This is an Xbox",
+   "client": "Xbox",
+   "kind": "Film",
+   "blurb": "One continuous flowing film of Xbox on every device in everyday life.",
+   "url": "https://snask.com/case/xbox-this-is-an-xbox/",
+   "img": "https://snask.com/wp-content/uploads/2024/11/02_xbox_still-1250x703.png"
+  },
+  "curaprox": {
+   "title": "House of Mouth",
+   "client": "Curaprox",
+   "kind": "Brand film",
+   "blurb": "A surreal film where everything starts with the mouth.",
+   "url": "https://snask.com/case/curaprox-house-of-mouth/",
+   "img": "https://snask.com/wp-content/uploads/2026/04/house-of-mouth_2-2-3.jpg"
+  },
+  "meta": {
+   "title": "Personalization II",
+   "client": "Meta",
+   "kind": "Films",
+   "blurb": "A yeti, a witch and a headless horseman explain your feed.",
+   "url": "https://snask.com/case/meta-personalization-ii/",
+   "img": "https://snask.com/wp-content/uploads/2025/09/meta_thumb.png"
+  },
+  "cheezington": {
+   "title": "Cheezington!",
+   "client": "Oddlygood",
+   "kind": "Campaign",
+   "blurb": "Launch films for a vegan cheese with a very odd name.",
+   "url": "https://snask.com/case/oddlygood-cheezington/",
+   "img": "https://snask.com/wp-content/uploads/2024/10/20240625_oddlygood44826-1250x833.png"
+  },
+  "fortnox": {
+   "title": "Fortnox rebrand",
+   "client": "Fortnox",
+   "kind": "Rebrand",
+   "blurb": "Bookkeeping software turned trusted hub for businesses and society.",
+   "url": "https://snask.com/case/fortnox/",
+   "img": "https://snask.com/wp-content/uploads/2022/08/00-Fortnox-Behance-Profile.jpg-1.webp"
+  },
+  "schuh": {
+   "title": "schuh rebrand",
+   "client": "schuh",
+   "kind": "Rebrand",
+   "blurb": "UK shoe retailer, refocused from products to people.",
+   "url": "https://snask.com/case/schuh-rebrand-of-uk-shoe-retailer/",
+   "img": "https://snask.com/wp-content/uploads/2020/05/schuh_thumb2.png-1.webp"
+  },
+  "spotify-dok": {
+   "title": "Dok podcast identity",
+   "client": "Spotify",
+   "kind": "Identity",
+   "blurb": "A flexible type system so any episode title fits on one line.",
+   "url": "https://snask.com/case/spotify-doks-podcast-branding/",
+   "img": "https://snask.com/wp-content/uploads/2021/05/spotify_thumb-1.webp"
+  },
+  "ica-stop": {
+   "title": "ICA Stop Täby",
+   "client": "ICA",
+   "kind": "Store & brand",
+   "blurb": "A cluttered family grocery store turned food destination.",
+   "url": "https://snask.com/case/ica-stop-taby-branding-concept-design-video/",
+   "img": "https://snask.com/wp-content/uploads/2024/02/ica-stop_02_2x3.jpg"
+  },
+  "lensway": {
+   "title": "Lensway rebrand films",
+   "client": "Lensway",
+   "kind": "Stop motion",
+   "blurb": "Eyewear brand rebuilt around eyes, bold colour and stop motion.",
+   "url": "https://snask.com/case/lensway-rebrand-films/",
+   "img": "https://snask.com/wp-content/uploads/2018/05/webthumb.png-1.webp"
+  },
+  "oddlygood-foamy-barista-tasty-soygurt": {
+   "title": "Foamy Barista & Tasty Soygurt",
+   "client": "OddlyGood",
+   "kind": "Campaign film",
+   "blurb": "",
+   "url": "https://snask.com/case/oddlygood-foamy-barista-tasty-soygurt/",
+   "img": ""
+  },
+  "vivantis": {
+   "title": "Rebrand & concept",
+   "client": "Vivantis",
+   "kind": "Rebrand & film",
+   "blurb": "",
+   "url": "https://snask.com/case/vivantis/",
+   "img": ""
+  },
+  "5man-rebrand-packaging": {
+   "title": "Rebrand & packaging",
+   "client": "5MAN",
+   "kind": "Packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/5man-rebrand-packaging/",
+   "img": ""
+  },
+  "curaprox-brilliant-brush-head": {
+   "title": "Brilliant Brush Head",
+   "client": "Curaprox",
+   "kind": "Campaign film",
+   "blurb": "",
+   "url": "https://snask.com/case/curaprox-brilliant-brush-head/",
+   "img": ""
+  },
+  "meta-storytime": {
+   "title": "Storytime",
+   "client": "Meta",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/meta-storytime/",
+   "img": ""
+  },
+  "films-for-meta-concept-direction-production": {
+   "title": "Personalization",
+   "client": "Meta",
+   "kind": "Brand film",
+   "blurb": "",
+   "url": "https://snask.com/case/films-for-meta-concept-direction-production/",
+   "img": ""
+  },
+  "oddlygood-stay-odd": {
+   "title": "Stay Odd!",
+   "client": "Oddlygood",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/oddlygood-stay-odd/",
+   "img": ""
+  },
+  "fifth-third-bank-a-fifth-third-better": {
+   "title": "A Fifth Third Better",
+   "client": "Fifth Third Bank",
+   "kind": "Brand film",
+   "blurb": "",
+   "url": "https://snask.com/case/fifth-third-bank-a-fifth-third-better/",
+   "img": ""
+  },
+  "bang-olufsen-creative-concept": {
+   "title": "Creative concept",
+   "client": "Bang & Olufsen",
+   "kind": "Art direction & photo",
+   "blurb": "",
+   "url": "https://snask.com/case/bang-olufsen-creative-concept/",
+   "img": ""
+  },
+  "hamster": {
+   "title": "Hamster",
+   "client": "Hamster",
+   "kind": "Design, film & photo",
+   "blurb": "",
+   "url": "https://snask.com/case/hamster/",
+   "img": ""
+  },
+  "wallbaby-naming-brand-strategy-tone-of-voice-visual-identity": {
+   "title": "Naming, strategy & identity",
+   "client": "Wallbaby",
+   "kind": "Branding",
+   "blurb": "",
+   "url": "https://snask.com/case/wallbaby-naming-brand-strategy-tone-of-voice-visual-identity/",
+   "img": ""
+  },
+  "snask-x-loqi": {
+   "title": "SNASK x LOQI",
+   "client": "LOQI",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/snask-x-loqi/",
+   "img": ""
+  },
+  "klarna-smoooth-scenarios": {
+   "title": "Brand identity content campaign",
+   "client": "Klarna",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/klarna-smoooth-scenarios/",
+   "img": ""
+  },
+  "viagra-boys-aint-nice-creatures": {
+   "title": "Ain't Nice & Creatures",
+   "client": "Viagra Boys",
+   "kind": "Music videos",
+   "blurb": "",
+   "url": "https://snask.com/case/viagra-boys-aint-nice-creatures/",
+   "img": ""
+  },
+  "kale-crave": {
+   "title": "Kale & Crave identity",
+   "client": "Kale & Crave",
+   "kind": "Identity",
+   "blurb": "",
+   "url": "https://snask.com/case/kale-crave/",
+   "img": ""
+  },
+  "likemeat-campaign": {
+   "title": "LikeMeat campaign",
+   "client": "LikeMeat",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/likemeat-campaign/",
+   "img": ""
+  },
+  "badminton": {
+   "title": "Badminton",
+   "client": "SNASK",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/badminton/",
+   "img": ""
+  },
+  "snask-merch": {
+   "title": "SNASK Merch",
+   "client": "SNASK",
+   "kind": "Merch",
+   "blurb": "",
+   "url": "https://snask.com/case/snask-merch/",
+   "img": ""
+  },
+  "idn-heal-the-world": {
+   "title": "Heal the World",
+   "client": "IDN",
+   "kind": "Print",
+   "blurb": "",
+   "url": "https://snask.com/case/idn-heal-the-world/",
+   "img": ""
+  },
+  "noosa-yoghurt-full-on-tasty": {
+   "title": "Full on Tasty!",
+   "client": "Noosa Yoghurt",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/noosa-yoghurt-full-on-tasty/",
+   "img": ""
+  },
+  "hedvig-nice-insurance-for-nice-people": {
+   "title": "Nice Insurance for Nice People",
+   "client": "Hedvig",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/hedvig-nice-insurance-for-nice-people/",
+   "img": ""
+  },
+  "klarna-google-apple-pay": {
+   "title": "Google & Apple Pay",
+   "client": "Klarna",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/klarna-google-apple-pay/",
+   "img": ""
+  },
+  "slanted-34-extremely-right": {
+   "title": "#34 Extremely Right?",
+   "client": "Slanted",
+   "kind": "Print",
+   "blurb": "",
+   "url": "https://snask.com/case/slanted-34-extremely-right/",
+   "img": ""
+  },
+  "turning-tables-sweden": {
+   "title": "Turning Tables Sweden",
+   "client": "Turning Tables Sweden",
+   "kind": "Design",
+   "blurb": "",
+   "url": "https://snask.com/case/turning-tables-sweden/",
+   "img": ""
+  },
+  "holvi-bank-smarter-not-harder": {
+   "title": "Bank smarter, not harder",
+   "client": "Holvi",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/holvi-bank-smarter-not-harder/",
+   "img": ""
+  },
+  "klarna-smooth-scenarios": {
+   "title": "Smoooth Scenarios",
+   "client": "Klarna",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/klarna-smooth-scenarios/",
+   "img": ""
+  },
+  "brooklyn-brewery": {
+   "title": "Brooklyn Brewery",
+   "client": "Brooklyn Brewery",
+   "kind": "Design & film",
+   "blurb": "",
+   "url": "https://snask.com/case/brooklyn-brewery/",
+   "img": ""
+  },
+  "umbrella": {
+   "title": "Umbrella",
+   "client": "Umbrella",
+   "kind": "Branding",
+   "blurb": "",
+   "url": "https://snask.com/case/umbrella/",
+   "img": ""
+  },
+  "klarna-black-friday-content": {
+   "title": "Black Friday content",
+   "client": "Klarna",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/klarna-black-friday-content/",
+   "img": ""
+  },
+  "aim-by-mia": {
+   "title": "AIM by Mia",
+   "client": "AIM by Mia",
+   "kind": "Design & film",
+   "blurb": "",
+   "url": "https://snask.com/case/aim-by-mia/",
+   "img": ""
+  },
+  "evry": {
+   "title": "EVRY",
+   "client": "EVRY",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/evry/",
+   "img": ""
+  },
+  "get-raw": {
+   "title": "GET RAW",
+   "client": "GET RAW",
+   "kind": "Branding & packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/get-raw/",
+   "img": ""
+  },
+  "sneakersnstuffadidas": {
+   "title": "Sneakersnstuff + adidas",
+   "client": "Sneakersnstuff + adidas",
+   "kind": "Live action",
+   "blurb": "",
+   "url": "https://snask.com/case/sneakersnstuffadidas/",
+   "img": ""
+  },
+  "sneakersnstuffadidas-cozy-as-kittens": {
+   "title": "Cozy as Kittens",
+   "client": "Sneakersnstuff + adidas",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/sneakersnstuffadidas-cozy-as-kittens/",
+   "img": ""
+  },
+  "monki": {
+   "title": "#monkifesto",
+   "client": "Monki",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/monki/",
+   "img": ""
+  },
+  "axfood": {
+   "title": "Axfood",
+   "client": "Axfood",
+   "kind": "Design & film",
+   "blurb": "",
+   "url": "https://snask.com/case/axfood/",
+   "img": ""
+  },
+  "froda": {
+   "title": "Froda",
+   "client": "Froda",
+   "kind": "Branding & web",
+   "blurb": "",
+   "url": "https://snask.com/case/froda/",
+   "img": ""
+  },
+  "holvi-banking-for-makers-doers": {
+   "title": "Banking for Makers & Doers",
+   "client": "Holvi",
+   "kind": "Design & film",
+   "blurb": "",
+   "url": "https://snask.com/case/holvi-banking-for-makers-doers/",
+   "img": ""
+  },
+  "kaibosh": {
+   "title": "Kaibosh",
+   "client": "Kaibosh",
+   "kind": "Identity",
+   "blurb": "",
+   "url": "https://snask.com/case/kaibosh/",
+   "img": ""
+  },
+  "klarna-singles-day": {
+   "title": "Culture Calendar",
+   "client": "Klarna",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/klarna-singles-day/",
+   "img": ""
+  },
+  "wauw": {
+   "title": "Wauw!",
+   "client": "Wauw!",
+   "kind": "Identity & packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/wauw/",
+   "img": ""
+  },
+  "fazer": {
+   "title": "Fazer",
+   "client": "Fazer",
+   "kind": "Print campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/fazer/",
+   "img": ""
+  },
+  "kandima": {
+   "title": "Kandima",
+   "client": "Kandima",
+   "kind": "Branding",
+   "blurb": "",
+   "url": "https://snask.com/case/kandima/",
+   "img": ""
+  },
+  "ubu-cosmetic-tools": {
+   "title": "UBU cosmetic tools",
+   "client": "UBU",
+   "kind": "Live action",
+   "blurb": "",
+   "url": "https://snask.com/case/ubu-cosmetic-tools/",
+   "img": ""
+  },
+  "vag": {
+   "title": "VÄG",
+   "client": "VÄG",
+   "kind": "Identity & packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/vag/",
+   "img": ""
+  },
+  "target": {
+   "title": "Target",
+   "client": "Target",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/target/",
+   "img": ""
+  },
+  "hang-konsten-lagt": {
+   "title": "Hang Art Low",
+   "client": "Häng Konsten Lågt",
+   "kind": "Editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/hang-konsten-lagt/",
+   "img": ""
+  },
+  "sabo-kombohus": {
+   "title": "Kombohus",
+   "client": "SABO",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/sabo-kombohus/",
+   "img": ""
+  },
+  "bord-13": {
+   "title": "Bord 13",
+   "client": "Bord 13",
+   "kind": "Identity & interior",
+   "blurb": "",
+   "url": "https://snask.com/case/bord-13/",
+   "img": ""
+  },
+  "chill-out-wines": {
+   "title": "Chill Out Wines",
+   "client": "Chill Out",
+   "kind": "Campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/chill-out-wines/",
+   "img": ""
+  },
+  "kontroll": {
+   "title": "Kontroll",
+   "client": "Kontroll",
+   "kind": "Editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/kontroll/",
+   "img": ""
+  },
+  "nordea-markets-3": {
+   "title": "Nordea Markets (print)",
+   "client": "Nordea Markets",
+   "kind": "Print & identity",
+   "blurb": "",
+   "url": "https://snask.com/case/nordea-markets-3/",
+   "img": ""
+  },
+  "pangpang-aight": {
+   "title": "PangPang Aight",
+   "client": "PangPang",
+   "kind": "Branding & packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/pangpang-aight/",
+   "img": ""
+  },
+  "printing-friends-issue-no-8": {
+   "title": "Issue No. 8",
+   "client": "Printing Friends",
+   "kind": "Editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/printing-friends-issue-no-8/",
+   "img": ""
+  },
+  "simris": {
+   "title": "Simris",
+   "client": "Simris",
+   "kind": "Identity & packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/simris/",
+   "img": ""
+  },
+  "the-washington-post": {
+   "title": "The Washington Post",
+   "client": "The Washington Post",
+   "kind": "Editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/the-washington-post/",
+   "img": ""
+  },
+  "malmofestivalen-2014": {
+   "title": "Malmö Festival 2014",
+   "client": "Malmö Festival",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/malmofestivalen-2014/",
+   "img": ""
+  },
+  "sabo-pt-4-shorter-showers": {
+   "title": "Shorter Showers",
+   "client": "SABO",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/sabo-pt-4-shorter-showers/",
+   "img": ""
+  },
+  "attention-craft": {
+   "title": "Attention: Craft",
+   "client": "Attention: Craft",
+   "kind": "Identity & exhibition",
+   "blurb": "",
+   "url": "https://snask.com/case/attention-craft/",
+   "img": ""
+  },
+  "oumph": {
+   "title": "Oumph!",
+   "client": "Oumph!",
+   "kind": "Identity & packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/oumph/",
+   "img": ""
+  },
+  "hemslojden": {
+   "title": "Swedish Handicraft Association",
+   "client": "Hemslöjden",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/hemslojden/",
+   "img": ""
+  },
+  "printing-friends-magazine-nr-7-resa": {
+   "title": "Issue No. 7",
+   "client": "Printing Friends",
+   "kind": "Editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/printing-friends-magazine-nr-7-resa/",
+   "img": ""
+  },
+  "yay-festival-2013-2": {
+   "title": "YAY Festival 2013",
+   "client": "YAY Festival",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/yay-festival-2013-2/",
+   "img": ""
+  },
+  "city-tunnel": {
+   "title": "The City Tunnel",
+   "client": "The City Tunnel",
+   "kind": "Stop motion",
+   "blurb": "",
+   "url": "https://snask.com/case/city-tunnel/",
+   "img": ""
+  },
+  "pangpang-brewery": {
+   "title": "PangPang Brewery",
+   "client": "PangPang Brewery",
+   "kind": "Identity & packaging",
+   "blurb": "",
+   "url": "https://snask.com/case/pangpang-brewery/",
+   "img": ""
+  },
+  "ssu": {
+   "title": "SSU political youth party",
+   "client": "SSU",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/ssu/",
+   "img": ""
+  },
+  "ahlens-2": {
+   "title": "Åhléns",
+   "client": "Åhléns",
+   "kind": "Stop motion",
+   "blurb": "",
+   "url": "https://snask.com/case/ahlens-2/",
+   "img": ""
+  },
+  "allmannyttan-se": {
+   "title": "I'm Harry",
+   "client": "SABO",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/allmannyttan-se/",
+   "img": ""
+  },
+  "folkoperan-love-at-folkoperan": {
+   "title": "Love at Folkoperan",
+   "client": "Folkoperan",
+   "kind": "Stop motion",
+   "blurb": "",
+   "url": "https://snask.com/case/folkoperan-love-at-folkoperan/",
+   "img": ""
+  },
+  "calexicos": {
+   "title": "Calexico's",
+   "client": "Calexico's",
+   "kind": "Print & identity",
+   "blurb": "",
+   "url": "https://snask.com/case/calexicos/",
+   "img": ""
+  },
+  "national-association-of-swedish-handicraft-societies": {
+   "title": "Swedish Handicraft Association (national)",
+   "client": "Hemslöjden",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/national-association-of-swedish-handicraft-societies/",
+   "img": ""
+  },
+  "dans": {
+   "title": "Dans <3 Stockholm",
+   "client": "Dans <3 Stockholm",
+   "kind": "Identity & editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/dans/",
+   "img": ""
+  },
+  "almega-pt-3-copy-machine": {
+   "title": "Copy Machine",
+   "client": "Almega",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/almega-pt-3-copy-machine/",
+   "img": ""
+  },
+  "mobiento-mobile-agency": {
+   "title": "Mobiento",
+   "client": "Mobiento",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/mobiento-mobile-agency/",
+   "img": ""
+  },
+  "malmofestival-2013": {
+   "title": "Malmö Festival 2013",
+   "client": "Malmö Festival",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/malmofestival-2013/",
+   "img": ""
+  },
+  "sabo": {
+   "title": "SABO",
+   "client": "SABO",
+   "kind": "Branding & campaign",
+   "blurb": "",
+   "url": "https://snask.com/case/sabo/",
+   "img": ""
+  },
+  "offf-lille": {
+   "title": "OFFF Lille 2012",
+   "client": "OFFF Lille",
+   "kind": "Live action",
+   "blurb": "",
+   "url": "https://snask.com/case/offf-lille/",
+   "img": ""
+  },
+  "forsakringskassan": {
+   "title": "Försäkringskassan",
+   "client": "Försäkringskassan",
+   "kind": "Stop motion",
+   "blurb": "",
+   "url": "https://snask.com/case/forsakringskassan/",
+   "img": ""
+  },
+  "nordea-markets-2": {
+   "title": "Nordea Markets (film)",
+   "client": "Nordea Markets",
+   "kind": "Live action",
+   "blurb": "",
+   "url": "https://snask.com/case/nordea-markets-2/",
+   "img": ""
+  },
+  "snask-loves-film": {
+   "title": "Snask Loves Film",
+   "client": "SNASK",
+   "kind": "Stop motion",
+   "blurb": "",
+   "url": "https://snask.com/case/snask-loves-film/",
+   "img": ""
+  },
+  "vadestra": {
+   "title": "Vadestra",
+   "client": "Vadestra",
+   "kind": "Editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/vadestra/",
+   "img": ""
+  },
+  "meatpacking-district": {
+   "title": "Meatpacking District",
+   "client": "Meatpacking District",
+   "kind": "Editorial",
+   "blurb": "",
+   "url": "https://snask.com/case/meatpacking-district/",
+   "img": ""
+  },
+  "yay-festival-2013": {
+   "title": "YAY Festival 2012",
+   "client": "YAY Festival",
+   "kind": "Identity & web",
+   "blurb": "",
+   "url": "https://snask.com/case/yay-festival-2013/",
+   "img": ""
+  },
+  "metro-save-my-day": {
+   "title": "Save My Day",
+   "client": "Metro",
+   "kind": "Film",
+   "blurb": "",
+   "url": "https://snask.com/case/metro-save-my-day/",
+   "img": ""
+  },
+  "liljevalchs": {
+   "title": "Hemslöjden at Liljevalchs",
+   "client": "Liljevalchs",
+   "kind": "Identity & exhibition",
+   "blurb": "",
+   "url": "https://snask.com/case/liljevalchs/",
+   "img": ""
   }
+ },
+ "shop": {
+  "pink-lies-jumper": {
+   "title": "Pink Lies Jumper",
+   "kind": "Unisex jumper",
+   "price": "129 EUR",
+   "url": "https://snask.com/product/pink-lies-jumper/",
+   "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-LIES.jpg"
+  },
+  "book": {
+   "title": "Make Enemies & Gain Fans",
+   "kind": "Book, 3rd and final edition",
+   "price": "36 EUR",
+   "url": "https://snask.com/product/make-enemies-gain-fans-3rd-and-final-edition-in-holographic-cover/",
+   "img": "https://snask.com/wp-content/uploads/2024/11/snask_ncover_hori.jpg"
+  },
+  "snask-off-tee": {
+   "title": "SNASK Off! T-shirt",
+   "kind": "Unisex tee",
+   "price": "45 EUR",
+   "url": "https://snask.com/product/snask-off-t-shirt/",
+   "img": "https://snask.com/wp-content/uploads/2021/04/PP-SNASK-OFF-TS-01.jpg"
+  },
+  "pink-tiger-tee": {
+   "title": "Pink Tiger T-shirt",
+   "kind": "Unisex tee",
+   "price": "45 EUR",
+   "url": "https://snask.com/product/pink-tiger-t-shirt/",
+   "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-TIGER.jpg"
+  },
+  "extremely-right-poster": {
+   "title": "Just Because You Are Extremely Right Doesn't Mean You Are Correct",
+   "kind": "Poster",
+   "price": "15 EUR",
+   "url": "https://snask.com/product/extremely-right-poster/",
+   "img": "https://snask.com/wp-content/uploads/2021/04/Poster-PP.jpg"
+  },
+  "stay-pink-poster": {
+   "title": "Stay Pink",
+   "kind": "Poster",
+   "price": "25 EUR",
+   "url": "https://snask.com/product/poster-stay-pink/",
+   "img": "https://snask.com/wp-content/uploads/2021/03/PP-Poster-Stay-Gold.jpg"
+  },
+  "champagne-mugs": {
+   "title": "Pink Champagne Mugs",
+   "kind": "Handmade with Kaia Keramik",
+   "price": "60 EUR",
+   "url": "https://snask.com/product/snask-pink-champagne-mugs-handmade-by-kaia/",
+   "img": "https://snask.com/wp-content/uploads/2023/10/kaia-x-snask-clean-image-2.jpg"
+  },
+  "stickers": {
+   "title": "Stickers Pack",
+   "kind": "Stickers",
+   "price": "10 EUR",
+   "url": "https://snask.com/product/stickers-pack/",
+   "img": ""
+  }
+ }
 }

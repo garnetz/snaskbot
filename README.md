@@ -7,7 +7,7 @@ This folder is a complete Vercel project. The pages in `public/` are static, and
 1. Get a Claude API key at https://platform.claude.com (Settings > API keys), add some credit under Billing, and set a monthly spend limit.
 2. This repo is ready to import as is.
 3. In Vercel, click **Add New > Project**, import the repo and keep the default settings ("Other" framework, no build command).
-4. Under **Environment Variables**, add `ANTHROPIC_API_KEY` with your key. Optional: `SNASK_MODEL=claude-haiku-5-5` for a much cheaper bot.
+4. Under **Environment Variables**, add `ANTHROPIC_API_KEY` with your key. Optional: `SNASK_MODEL=claude-haiku-5-5` for a much cheaper bot. Leave `BRIEF_WEBHOOK_URL` unset for now (see below).
 5. Click **Deploy**. You get a link like `snaskbot.vercel.app`.
 
 If you prefer the CLI, run `npm i -g vercel`, then `vercel` in this folder, `vercel env add ANTHROPIC_API_KEY`, and `vercel --prod`.
@@ -23,4 +23,12 @@ If you prefer the CLI, run `npm i -g vercel`, then `vercel` in this folder, `ver
 
 - Only snask.com, its subdomains and the Vercel site itself can show the chat. To allow other sites, edit the `frame-ancestors` line in `vercel.json`.
 - The 30-messages-per-10-minutes visitor limit is best effort, because Vercel can run several copies of the function. For real protection, add a rate-limit rule under the project's **Firewall** tab and keep the spend limit in the Claude Console.
-- The bot's voice and facts live in `persona.md`, and the project and shop cards it can show live in `catalog.json`. `api/_persona.js` and `public/chat.html` are generated from them, so ask Claude in the project to rebuild after editing either file.
+- The bot's voice and facts live in `persona.md`, the card and image rules in `rich-rules.md`, the mode buttons in `modes.json`, and the 102 cases and fallback shop in `catalog.json`. `api/_generated.js` and `public/chat.html` are generated from them, so ask Claude in the project to rebuild after editing any of them.
+- Answers stream in word by word from `api/chat.js`. Visitors can attach a logo or screenshot (shrunk to 1024px in the browser) to get it roasted, and any answer can be saved as a pink poster image.
+- The shop is live: `api/catalog.js` reads products and prices from snask.com's public WooCommerce Store API and new cases from the Our Work page, caches them for six hours, and falls back to `catalog.json` if snask.com doesn't answer.
+
+## The brief form (delivery is OFF)
+
+When someone has a real project, the bot can show a "Got a real project?" form. Right now `api/brief.js` validates it but sends it nowhere, and the visitor is asked to copy it and email help@snask.com instead.
+
+Only turn delivery on once SNASK has said yes. Then set `BRIEF_WEBHOOK_URL` in Vercel to a webhook that SNASK controls (a Slack incoming webhook, Zapier, Make, and so on). The function POSTs `{text, name, email, company, budget, project}` to it. The form has a hidden honeypot field and a limit of 5 briefs per visitor per 10 minutes.
