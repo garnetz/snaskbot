@@ -149,10 +149,15 @@ body {
 .mini-actions { display: flex; gap: 6px; }
 .call { position: fixed; inset: 0; z-index: 30; background: var(--ink); display: grid; place-items: center; padding: 16px; animation: fade .25s ease; overflow-y: auto; }
 .call-box { width: min(420px, 100%); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; color: var(--pink); }
-.voice svg { width: 18px; height: 18px; }
-.voice:hover { transform: rotate(14deg); }
-.voice::after { content: "β"; position: absolute; margin: -22px -24px 0 0; font: 800 .6rem/1 var(--font-display); background: var(--hot); color: var(--ink); border-radius: 999px; padding: 2px 4px; }
-.voice { position: relative; }
+.input-row { display: flex; align-items: center; gap: 10px; order: 1; }
+.input-row #form { flex: 1; min-width: 0; order: 0; }
+.input-row .voice { order: 1; }
+.voice { position: relative; flex: none; width: 54px; height: 54px; border-radius: 50%; border: 2.5px solid var(--ink); background: var(--hot); color: var(--ink); display: grid; place-items: center; cursor: pointer; animation: rise .6s var(--ease-out) .9s both; transition: transform .3s var(--ease-pop), background .2s; }
+.voice[hidden] { display: none; }
+.voice svg { width: 22px; height: 22px; }
+.voice:hover { transform: rotate(14deg) scale(1.06); background: var(--pink); }
+.voice::after { content: "BETA"; position: absolute; top: -8px; right: -10px; font: 800 .5rem/1 var(--font-display); font-stretch: 125%; letter-spacing: .06em; background: var(--ink); color: var(--pink); border-radius: 999px; padding: 3px 5px; transform: rotate(8deg); }
+.embed .voice { width: 46px; height: 46px; }
 .call-kicker .beta { display: inline-block; margin-left: 6px; padding: 3px 7px; border-radius: 999px; background: var(--hot); color: var(--ink); letter-spacing: .08em; transform: rotate(-4deg); }
 .call-kicker { margin: 0 0 14px; font: 800 .7rem/1 var(--font-display); font-stretch: 125%; letter-spacing: .12em; text-transform: uppercase; color: var(--hot); }
 .call-avatar { position: relative; width: 150px; height: 150px; display: grid; place-items: center; margin-bottom: 10px; }
@@ -483,7 +488,10 @@ form { padding-left: 10px; }
 .poster-modal { position: fixed; inset: 0; z-index: 20; background: color-mix(in srgb, var(--ink) 75%, transparent); display: grid; place-items: center; padding: 16px; animation: fade .25s ease; }
 @keyframes fade { from { opacity: 0; } }
 .poster-box { display: flex; flex-direction: column; align-items: center; gap: 12px; max-height: 100%; animation: pop .45s var(--ease-pop); }
-.poster-box canvas { width: auto; height: auto; max-width: min(420px, 100%); max-height: calc(100vh - 140px); aspect-ratio: 1080 / 1350; border-radius: 6px; box-shadow: 0 20px 60px rgb(0 0 0 / .4); }
+.poster-formats { display: flex; gap: 4px; padding: 3px; border-radius: 999px; background: color-mix(in srgb, var(--pink) 18%, transparent); }
+.poster-formats button { font: 800 .7rem/1 var(--font-display); font-stretch: 125%; letter-spacing: .06em; text-transform: uppercase; padding: 8px 12px; border-radius: 999px; border: 0; background: transparent; color: var(--pink); cursor: pointer; }
+.poster-formats button[aria-pressed="true"] { background: var(--pink); color: var(--ink); }
+.poster-box canvas { height: auto; width: min(420px, 100%, calc((100vh - 220px) * var(--rw, .8))); width: min(420px, 100%, calc((100dvh - 220px) * var(--rw, .8))); aspect-ratio: var(--ratio, 1080 / 1350); border-radius: 6px; box-shadow: 0 20px 60px rgb(0 0 0 / .4); }
 .poster-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .poster-actions button { font: 800 .8rem/1 var(--font-display); font-stretch: 125%; text-transform: uppercase; letter-spacing: .05em; padding: 11px 16px; border-radius: 999px; border: 2px solid var(--pink); background: var(--pink); color: var(--ink); cursor: pointer; transition: transform .2s var(--ease-pop); }
 .poster-actions button:hover { transform: translateY(-2px) rotate(-2deg); }
@@ -537,6 +545,7 @@ form { padding-left: 10px; }
       <div class="dock-inner">
         <div class="chips" id="chips" aria-label="Starter questions"></div>
         <div class="modes" id="modes" role="group" aria-label="Mode"></div>
+        <div class="input-row">
         <form id="form">
           <button type="button" class="clip" id="clip" aria-label="Attach a logo or screenshot to roast" hidden>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5 12.5 20a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg>
@@ -544,12 +553,13 @@ form { padding-left: 10px; }
           <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
           <div class="attach-preview" id="preview" hidden><img id="preview-img" alt="Image to roast"><button type="button" id="preview-x" aria-label="Remove image">×</button></div>
           <textarea id="box" rows="1" aria-label="Message" placeholder="Ask me anything. Be brave." autocomplete="off"></textarea>
-          <button type="button" class="clip voice" id="voice" hidden aria-label="Call the Recruitment Officer (voice, beta)" title="Voice call (beta)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
           <button class="send" id="send" type="submit" aria-label="Send">
             <svg class="ico-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5M9 5h10v10"/></svg>
             <svg class="ico-stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
           </button>
         </form>
+        <button type="button" class="voice" id="voice" hidden aria-label="Call the Recruitment Officer (voice, beta)" title="Voice call (beta)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
+        </div>
         <div class="foot">
           <span id="mode"><span class="live-dot"></span><span id="mode-text">Waking up the pink brain…</span></span>
           <span>Unofficial prototype, not run by SNASK</span>
@@ -564,6 +574,10 @@ form { padding-left: 10px; }
 <div class="poster-modal" id="poster" hidden>
   <div class="poster-box">
     <canvas id="poster-canvas" width="1080" height="1350" aria-label="Poster of the answer"></canvas>
+    <div class="poster-formats" role="group" aria-label="Format">
+      <button type="button" data-f="feed" aria-pressed="true">Feed 4:5</button>
+      <button type="button" data-f="story" aria-pressed="false">Story 9:16</button>
+    </div>
     <div class="poster-actions">
       <button type="button" id="poster-save">Save image</button>
       <button type="button" id="poster-share" hidden>Share</button>
@@ -896,14 +910,25 @@ async function distill(question, answer) {
     return h && h.split(/\s+/).length <= 12 ? h : fallbackHeadline(answer);
   } catch { return fallbackHeadline(answer); }
 }
+let posterFormat = "feed", posterArgs = null, posterName = "snaskbot-poster.png";
+document.querySelectorAll(".poster-formats button").forEach((b) => b.onclick = () => {
+  posterFormat = b.dataset.f;
+  document.querySelectorAll(".poster-formats button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  if (posterArgs) openPoster(...posterArgs);
+});
 async function openPoster(question, answer, msg) {
+  posterArgs = [question, answer, msg];
   $("poster-note").textContent = "Distilling the genius…";
   $("poster-save").hidden = true; $("poster-share").hidden = true;
   $("poster").hidden = false;
   const headline = (msg && msg.dataset.headline) || await distill(question, answer);
   if (msg) msg.dataset.headline = headline;
   const c = $("poster-canvas"), ctx = c.getContext("2d");
-  const W = 1080, H = 1350, M = 84;
+  // Feed is Instagram's 4:5 portrait; Story is 9:16 with the top and bottom kept clear of Instagram's own buttons.
+  const story = posterFormat === "story";
+  const W = 1080, H = story ? 1920 : 1350, M = 84, ST = story ? 260 : 0, SB = story ? 300 : 0;
+  c.width = W; c.height = H; c.style.setProperty("--ratio", `${W} / ${H}`); c.style.setProperty("--rw", String(W / H));
+  posterName = story ? "snaskbot-story.png" : "snaskbot-poster.png";
   const css = getComputedStyle(document.documentElement);
   const pink = css.getPropertyValue("--pink").trim(), ink = css.getPropertyValue("--ink").trim(), hot = css.getPropertyValue("--hot").trim(), paper = css.getPropertyValue("--paper").trim();
   try { await Promise.all([document.fonts.load('900 100px "Archivo"'), document.fonts.load('italic 60px "Instrument Serif"')]); } catch {}
@@ -913,9 +938,9 @@ async function openPoster(question, answer, msg) {
   try { ctx.fontStretch = "expanded"; } catch {}
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = ink; ctx.font = '800 26px "Archivo", sans-serif';
-  ctx.fillText("SNASKBOT SAYS", M, 150);
-  ctx.fillStyle = hot; ctx.fillText("✶", M + ctx.measureText("SNASKBOT SAYS  ").width, 150);
-  const top = 230, bottom = H - 380;
+  ctx.fillText("SNASKBOT SAYS", M, 150 + ST);
+  ctx.fillStyle = hot; ctx.fillText("✶", M + ctx.measureText("SNASKBOT SAYS  ").width, 150 + ST);
+  const top = 230 + ST, bottom = H - 380 - SB;
   let size = 210, lines;
   for (; size >= 64; size -= 6) {
     ctx.font = `900 ${size}px "Archivo", sans-serif`;
@@ -933,7 +958,7 @@ async function openPoster(question, answer, msg) {
     ctx.fillStyle = ink; ctx.fillText(q, M, y);
   }
   // wordmark
-  const base = H - 100;
+  const base = H - 100 - SB;
   if (LOGO) {
     // logo letters, tinted ink, then the robot in a hot pink circle
     const h = 120; let x = M;
@@ -962,9 +987,9 @@ async function openPoster(question, answer, msg) {
   if (!LOGO) { ctx.fillStyle = hot; ctx.font = '120px "Archivo", sans-serif'; ctx.fillText("♥", W - M - 90, base); }
   try { ctx.fontStretch = "normal"; } catch {}
   ctx.fillStyle = ink; ctx.font = '600 24px "Archivo", sans-serif';
-  ctx.fillText("snask.com · unofficial SNASKBOT prototype", M, H - 48);
+  ctx.fillText("snask.com · unofficial SNASKBOT prototype", M, H - 48 - SB);
   posterBlob = await new Promise((r) => c.toBlob(r, "image/png"));
-  const file = posterBlob && new File([posterBlob], "snaskbot-poster.png", { type: "image/png" });
+  const file = posterBlob && new File([posterBlob], posterName, { type: "image/png" });
   $("poster-share").hidden = !(file && navigator.canShare && navigator.canShare({ files: [file] }));
   $("poster-save").hidden = MODE !== "server" && !downloads;
   $("poster-note").textContent = "";
@@ -978,16 +1003,16 @@ $("poster-save").onclick = async () => {
   if (MODE === "server") {
     const a = document.createElement("a");
     a.href = URL.createObjectURL(posterBlob);
-    a.download = "snaskbot-poster.png";
+    a.download = posterName;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     return;
   }
-  try { await downloads.save({ filename: "snaskbot-poster.png", data: posterBlob }); $("poster-note").textContent = "Saved. Stay pink."; }
+  try { await downloads.save({ filename: posterName, data: posterBlob }); $("poster-note").textContent = "Saved. Stay pink."; }
   catch (e) { $("poster-note").textContent = e && e.code === "declined" ? "" : "Couldn't save it here."; }
 };
 $("poster-share").onclick = async () => {
-  try { await navigator.share({ files: [new File([posterBlob], "snaskbot-poster.png", { type: "image/png" })], text: "SNASKBOT says" }); } catch {}
+  try { await navigator.share({ files: [new File([posterBlob], posterName, { type: "image/png" })], text: "SNASKBOT says" }); } catch {}
 };
 
 // ── brief form ──
