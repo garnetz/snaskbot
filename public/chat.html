@@ -840,7 +840,7 @@ function renderReply(b, raw, done) {
       a.className = "ask";
       a.textContent = q;
       a.style.setProperty("--i", i);
-      a.onclick = () => { burst(a); ask(q); };
+      a.onclick = () => { burst(a); ask(q, true); };
       wrap.append(a);
     });
     b.append(wrap);
@@ -1242,7 +1242,7 @@ function renderChips(reshuffle) {
     c.onclick = onclick;
     chips.append(c);
   };
-  deck.slice(0, chipCount()).forEach((s) => add(s, "chip", (ev) => { burst(ev.currentTarget); ask(s); }));
+  deck.slice(0, chipCount()).forEach((s) => add(s, "chip", (ev) => { burst(ev.currentTarget); ask(s, true); }));
   add("↻", "chip shuffle", (ev) => { burst(ev.currentTarget); renderChips(true); });
   chips.lastChild.setAttribute("aria-label", "Shuffle prompts");
   chips.lastChild.title = "Shuffle";
@@ -1363,7 +1363,7 @@ async function callClaude(onText, signal, image, o) {
   return text;
 }
 
-async function ask(text) {
+async function ask(text, tapped) {
   text = text.trim();
   const image = attached;
   if (image && !live) { setAttached(null); }
@@ -1383,7 +1383,8 @@ async function ask(text) {
     ub.prepend(im);
     setAttached(null);
   }
-  turns.push({ role: "user", content: image && live ? text + "\n(I attached an image for you to roast.)" : text });
+  // Suggestion buttons are written by us, so they say nothing about the visitor's language; flag them for the model.
+  turns.push({ role: "user", content: (image && live ? text + "\n(I attached an image for you to roast.)" : text) + (tapped ? "\n(tapped a suggestion button)" : "") });
   const b = bubble("assistant", DOTS);
   b.parentElement.dataset.question = text;
 
@@ -1589,12 +1590,12 @@ function goOffline() { setLive(false, "Offline mode: starter questions only"); m
 
 form.addEventListener("submit", (ev) => {
   ev.preventDefault();
-  let t = box.value;
-  if (!t.trim() && currentTeaser) { t = currentTeaser; nextTeaser(); }
+  let t = box.value, tapped = false;
+  if (!t.trim() && currentTeaser) { t = currentTeaser; nextTeaser(); tapped = true; }
   box.value = "";
   autosize();
   burst(sendBtn);
-  ask(t);
+  ask(t, tapped);
 });
 sendBtn.addEventListener("click", () => { if (ctl) ctl.abort(); });
 box.addEventListener("keydown", (ev) => {
