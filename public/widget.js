@@ -15,7 +15,7 @@
 
   var css = document.createElement("style");
   css.textContent =
-    "#snaskbot-btn{position:fixed;right:20px;bottom:20px;z-index:2147483001;width:68px;height:68px;border-radius:50%;" +
+    "#snaskbot-btn{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:2147483001;width:68px;height:68px;border-radius:50%;" +
     "background:" + PINK + ";border:3px solid " + INK + ";box-shadow:4px 4px 0 " + INK + ";cursor:pointer;" +
     "font:900 13px/1 'Arial Black',Impact,sans-serif;color:" + INK + ";letter-spacing:.02em;transform:rotate(-8deg);transition:transform .25s " + EASE + "}" +
     "#snaskbot-btn{display:grid;place-items:center;padding:0}#snaskbot-btn svg{width:36px;height:36px}" +
@@ -25,7 +25,7 @@
     "#snaskbot-btn:hover{animation:none;transform:rotate(4deg) scale(1.08)}" +
     "#snaskbot-btn:active{transform:scale(.9)}" +
     "#snaskbot-btn:focus-visible,.snaskbot-tool:focus-visible{outline:3px solid " + INK + ";outline-offset:3px}" +
-    "#snaskbot-panel{position:fixed;right:20px;bottom:100px;z-index:2147483000;width:400px;height:640px;max-height:calc(100vh - 120px);" +
+    "#snaskbot-panel{position:fixed;right:20px;bottom:100px;z-index:2147483000;width:400px;height:640px;max-height:calc(100vh - 120px);max-height:calc(100dvh - 120px);" +
     "border:3px solid " + INK + ";border-radius:22px;box-shadow:8px 8px 0 " + PINK + ";overflow:hidden;background:" + BG + ";display:none;" +
     "transform-origin:100% 100%;transition:inset .45s cubic-bezier(.22,1,.36,1),width .45s cubic-bezier(.22,1,.36,1),height .45s cubic-bezier(.22,1,.36,1),border-radius .45s,box-shadow .45s}" +
     "#snaskbot-panel.open{display:block;animation:snaskbot-in .45s " + EASE + "}" +
@@ -41,8 +41,8 @@
     "#snaskbot-panel.full .snaskbot-tool svg{width:16px;height:16px}" +
     "html.snaskbot-lock,html.snaskbot-lock body{overflow:hidden}" +
     "html.snaskbot-lock #snaskbot-btn{display:none}" +
-    "@media (max-width:520px){#snaskbot-panel{right:8px;left:8px;bottom:92px;width:auto;height:calc(100vh - 110px);max-height:none}" +
-    "#snaskbot-panel.full{left:0;right:0;bottom:0;height:100vh;height:100dvh}}" +
+    "@media (max-width:520px){#snaskbot-panel{right:8px;left:8px;top:max(12px,env(safe-area-inset-top));bottom:calc(92px + env(safe-area-inset-bottom));width:auto;height:auto;max-height:none}" +
+    "#snaskbot-panel.full{left:0;right:0;top:0;bottom:0;height:auto}}" +
     "@media (prefers-reduced-motion:reduce){#snaskbot-btn,#snaskbot-panel,.snaskbot-tool{transition:none;animation:none}}";
   document.head.appendChild(css);
 
