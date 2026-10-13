@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>SNASKBOT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&family=Instrument+Serif:ital@1&display=swap">
+<style>
+/* Layout: SNASK pink poster. Black ticker on top; empty state is a big wordmark with the input dead centre;
+   once you talk, the wordmark folds away, the chat fills the middle and the input slides to the bottom.
+   Single deliberate look (pastel pink + black), so no dark variant. */
+:root {
+  color-scheme: light;
+  --pink: #ffcddb;        /* SNASK pastel pink ground */
+  --hot: #ff3d8b;         /* loud pink for accents */
+  --ink: #000000;         /* SNASK black */
+  --paper: #ffffff;
+  --muted: #5b2a3e;
+  --live: #15803d;
+  --font-display: "Archivo", "Arial Black", Impact, system-ui, sans-serif;  /* used at wdth 125, wght 900, caps */
+  --font-body: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-romance: "Instrument Serif", Georgia, "Times New Roman", serif;   /* italic, for the love bits */
+  --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--pink);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.45;
+  overflow: hidden;
+}
+.app { height: 100%; display: flex; flex-direction: column; }
+
+/* ── ticker ── */
+.ticker {
+  flex: none;
+  background: var(--ink);
+  color: var(--pink);
+  overflow: hidden;
+  white-space: nowrap;
+  font: 800 .78rem/1 var(--font-display);
+  font-stretch: 125%;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding-block: 9px;
+  user-select: none;
+}
+.ticker .track { display: inline-flex; animation: tick 28s linear infinite; }
+.ticker span { padding-inline: 14px; }
+.ticker .star { color: var(--hot); display: inline-block; animation: spin 4s linear infinite; padding: 0; }
+.ticker:hover .track { animation-play-state: paused; }
+@keyframes tick { to { transform: translateX(-50%); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── stage ── */
+.stage {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.spacer { flex: 1 1 0; transition: flex-grow .7s var(--ease-out); }
+.chatting .spacer { flex-grow: 0; }
+
+.hero {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows .6s var(--ease-out), opacity .4s ease;
+}
+.hero > div { overflow: hidden; text-align: center; padding-block: 8px 22px; }
+.chatting .hero { grid-template-rows: 0fr; opacity: 0; }
+
+.wordmark {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(2.2rem, 10.5vw, 5.4rem);
+  white-space: nowrap;
+  line-height: .86;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+  display: inline-flex;
+  justify-content: center;
+}
+.wordmark span {
+  display: inline-block;
+  animation: drop .8s var(--ease-pop) both;
+  animation-delay: calc(var(--i) * 55ms + 100ms);
+  transition: transform .25s var(--ease-pop), color .2s;
+  cursor: default;
+}
+.wordmark span:hover { transform: translateY(-.12em) rotate(-6deg); color: var(--hot); }
+.wordmark .bot { color: var(--paper); -webkit-text-stroke: 3px var(--ink); paint-order: stroke fill; }
+.wordmark .bot:hover { color: var(--hot); }
+@keyframes drop {
+  0% { transform: translateY(-120%) rotate(-12deg); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+.lede {
+  margin: 14px auto 0;
+  max-width: 34ch;
+  font-size: 1.05rem;
+  animation: rise .7s var(--ease-out) .65s both;
+}
+.lede em { font-family: var(--font-romance); font-size: 1.3em; line-height: 1; }
+.heart { display: inline-block; color: var(--hot); animation: beat 1.4s ease-in-out infinite; }
+@keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.3); } 30% { transform: scale(.95); } 45% { transform: scale(1.15); } }
+@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ── chat ── */
+.chat {
+  flex: 0 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 4px;
+  scrollbar-width: thin;
+  transition: flex-grow .7s var(--ease-out), padding .5s;
+}
+.chatting .chat { flex-grow: 1; padding-block: 22px 18px; }
+.msg { display: flex; flex-direction: column; gap: 4px; max-width: 86%; min-width: 0; animation: pop .45s var(--ease-pop) both; }
+.msg .who {
+  font: 800 .66rem/1 var(--font-display);
+  font-stretch: 125%;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.bubble {
+  padding: 12px 16px;
+  border-radius: 22px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  font-size: 1rem;
+}
+.bot { align-self: flex-start; transform-origin: 0 100%; }
+.bot .bubble { background: var(--paper); border: 2px solid var(--ink); border-bottom-left-radius: 6px; }
+.me { align-self: flex-end; align-items: flex-end; transform-origin: 100% 100%; }
+.me .bubble { background: var(--ink); color: var(--pink); border-bottom-right-radius: 6px; font-weight: 500; }
+.bubble strong { font-weight: 800; }
+.bot .bubble strong { box-shadow: inset 0 -.45em 0 var(--pink); }
+.bubble em { font-family: var(--font-romance); font-size: 1.15em; }
+@keyframes pop { from { transform: scale(.6) translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.dots { display: inline-flex; gap: 5px; padding-block: 6px; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); animation: hop 1s ease-in-out infinite; }
+.dots i:nth-child(2) { animation-delay: .15s; background: var(--hot); }
+.dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes hop { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(-7px); } }
+.note { font-size: .8rem; color: var(--muted); font-style: italic; }
+
+/* ── dock: chips + input ── */
+.dock { flex: none; padding-block: 0 calc(12px + env(safe-area-inset-bottom, 0px)); }
+.dock-inner { display: flex; flex-direction: column; }
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  order: 2;
+}
+@media (max-width: 560px) {
+  .chips { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding: 2px 2px 8px; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; }
+}
+.chatting .chips { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin: 0 0 10px; padding: 2px 2px 6px; scrollbar-width: none; order: 0; }
+.chip {
+  flex: none;
+  font: 600 .88rem/1.2 var(--font-body);
+  color: var(--ink);
+  background: transparent;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 7px 13px;
+  cursor: pointer;
+  animation: rise .5s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 60ms + 900ms);
+  transition: background .2s, color .2s, transform .25s var(--ease-pop);
+}
+.chatting .chip { animation: none; }
+.chip:hover { background: var(--ink); color: var(--pink); transform: translateY(-2px) rotate(-2deg); }
+.chip:nth-child(even):hover { transform: translateY(-2px) rotate(2deg); }
+.chip:active { transform: scale(.92); }
+
+form {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 30px;
+  padding: 7px 7px 7px 20px;
+  box-shadow: 0 0 0 0 var(--hot);
+  transition: box-shadow .35s var(--ease-out), transform .35s var(--ease-pop);
+  animation: rise .6s var(--ease-out) .8s both;
+  order: 1;
+}
+form:focus-within { box-shadow: 0 0 0 6px var(--hot); transform: translateY(-2px); }
+form.shake { animation: shake .4s; }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+textarea {
+  flex: 1;
+  min-width: 0;
+  resize: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: 500 1.05rem/1.4 var(--font-body);
+  color: var(--ink);
+  padding-block: 10px;
+  max-height: 140px;
+}
+textarea::placeholder { color: var(--muted); opacity: .8; }
+.send {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--ink);
+  color: var(--pink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform .3s var(--ease-pop), background .2s;
+}
+.send svg { width: 22px; height: 22px; transition: transform .35s var(--ease-pop); }
+.send:hover { background: var(--hot); transform: rotate(-12deg) scale(1.08); }
+.send:hover svg { transform: translate(2px, -2px); }
+.send:active { transform: scale(.85); }
+.send.fly svg { animation: fly .5s var(--ease-out); }
+@keyframes fly { 50% { transform: translate(26px, -26px); opacity: 0; } 51% { transform: translate(-26px, 26px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.send.stop { background: var(--hot); color: var(--ink); }
+.send .ico-stop { display: none; }
+.send.stop .ico-send { display: none; }
+.send.stop .ico-stop { display: block; }
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+  font-size: .72rem;
+  color: var(--muted);
+  margin: 10px 6px 0;
+  order: 3;
+}
+.foot button { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.foot button:hover { color: var(--hot); }
+.live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: 1px; }
+.is-live .live-dot { background: var(--live); animation: blink 2s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+
+/* flying hearts */
+.burst { position: fixed; pointer-events: none; z-index: 10; color: var(--hot); font-size: 18px; animation: float 1s var(--ease-out) forwards; }
+@keyframes float { to { transform: translate(var(--dx), var(--dy)) rotate(var(--r)) scale(.4); opacity: 0; } }
+
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+textarea:focus-visible { outline: 0; }
+
+/* compact layout inside the website widget */
+.embed .ticker { font-size: .68rem; padding-block: 7px; }
+.embed .wordmark { font-size: 2.6rem; }
+.embed .lede { font-size: .95rem; }
+.embed .chip { font-size: .8rem; padding: 6px 11px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .ticker .track { animation: none; }
+}
+</style>
+
+<div class="app" id="app">
+  <div class="ticker" aria-hidden="true"><div class="track" id="track"></div></div>
+
+  <div class="stage">
+    <div class="spacer"></div>
+
+    <section class="hero" aria-label="Intro">
+      <div>
+        <h1 class="wordmark" id="wordmark" aria-label="SNASKBOT"></h1>
+        <p class="lede">The unofficial chatty sidekick of SNASK. Ask about branding, our work, Shower Beer, or your <em>future romance</em> <span class="heart">♥</span></p>
+      </div>
+    </section>
+
+    <main class="chat" id="chat" aria-live="polite"></main>
+
+    <div class="dock">
+      <div class="dock-inner">
+        <div class="chips" id="chips" aria-label="Starter questions"></div>
+        <form id="form">
+          <textarea id="box" rows="1" aria-label="Message" placeholder="Ask me anything. Be brave." autocomplete="off"></textarea>
+          <button class="send" id="send" type="submit" aria-label="Send">
+            <svg class="ico-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19 19 5M9 5h10v10"/></svg>
+            <svg class="ico-stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          </button>
+        </form>
+        <div class="foot">
+          <span id="mode"><span class="live-dot"></span><span id="mode-text">Waking up the pink brain…</span></span>
+          <span>Unofficial prototype, not run by SNASK · <button type="button" id="reset">Start over</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+  </div>
+</div>
+
+<script>window.SNASK_MODE = "server";</script>
+<script>
+const PERSONA = "";
+if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add("embed");
+const MODE = window.SNASK_MODE || "artifact"; // "artifact" uses Claude in the viewer; "server" posts to /api/chat
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const STARTERS = [
+  "You rebranded North Korea. Do my ex next.",
+  "My boss wants it 'more corporate'. Help.",
+  "Pitch a Viagra Boys video. Budget: one kebab.",
+  "Is beige a crime?",
+  "Can I work at SNASK if I can't make coffee?",
+  "Rebrand my cat. Her name is Doris.",
+  "What's Shower Beer and is it legal?",
+  "Roast my startup name: 'Synergix'",
+  "Write my dating profile, SNASK style",
+  "Most SNASK thing in the shop?",
+];
+const TEASERS = ["Ask me anything. Be brave.", "Should I get my logo as a neck tattoo?", "Is Comic Sans punk?", "Rebrand my Monday.", "Hej! Vad gör SNASK?"];
+const TICKER = ["SNASK OFF!", "We are your future romance", "Walk until you see the pink bar", "Bureaucrazy is dead", "Make enemies & gain fans", "Stay pink", "Disco is dead, drink Shower Beer"];
+
+// Used only when Claude can't be reached from this view.
+const CANNED = {
+  "You rebranded North Korea. Do my ex next.": "Love Korea came with one condition: prove you're a free democracy first. Your ex gets the same deal. New name: **Lesson.** Tagline: *\"Love is not about being perfect. Clearly.\"* Files available once they apologise.",
+  "My boss wants it 'more corporate'. Help.": "Classic. Remind them: just because you wear a black suit doesn't mean you're a goddamn professional. Then make it 10% more corporate by adding one (1) navy pixel. Pink stays.",
+  "Pitch a Viagra Boys video. Budget: one kebab.": "Open on the kebab. Slow motion. The band fights over the last falafel in a laundromat at 3am, lit only by a vending machine. Final shot: the kebab wins. We've done Punk Rock Loser and Ain't No Thief, so trust us, it works.",
+  "Is beige a crime?": "Not legally. Spiritually, yes. Beige never started a revolution, never got a second date, never sold out a batch of Shower Beer. Stay pink.",
+  "Can I work at SNASK if I can't make coffee?": "Perfect, we don't expect you to make coffee. No open jobs are listed right now, but our Recruitment Officer George Michael reads carelesswhisper@snask.com. Send something pretty in pink.",
+  "Rebrand my cat. Her name is Doris.": "Doris is no longer Doris. She is **DORIS.** All caps, gold foil collar, a signature hiss as her sonic logo. Tagline: *\"I knocked it off the table because I love you.\"*",
+  "What's Shower Beer and is it legal?": "Totally legal. A sweet but strong pale ale in a palm-friendly 18cl bottle, screen-printed in SNASK pink. Disco is dead and modern adults drink Shower Beer. Tom Hanks loves it, apparently.",
+  "Roast my startup name: 'Synergix'": "Synergix sounds like a printer driver that crashes on Fridays. Brands are built on emotions, and right now the emotion is 'please update to version 4.2'.",
+  "Write my dating profile, SNASK style": "Doctor of disturbance. Wizard of disruption. Allergic to beige and bureaucrazy. Looking for my future romance, or at least someone to split a Shower Beer with. Swipe pink.",
+  "Most SNASK thing in the shop?": "The Pink Lies Jumper (129 EUR last I checked) or the poster that says *Just Because You Are Extremely Right Doesn't Mean You Are Correct*. Hang it above your boss's desk. snask.com/shop",
+};
+
+const $ = (id) => document.getElementById(id);
+const app = $("app"), chat = $("chat"), box = $("box"), form = $("form"), sendBtn = $("send"), modeEl = $("mode"), modeText = $("mode-text");
+let turns = [];
+let ctl = null;
+let sample = null;
+let live = false;
+
+function esc(s) { return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function fmt(s) {
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+}
+function scrollDown() { chat.scrollTop = chat.scrollHeight; }
+function bubble(role, html) {
+  const wrap = document.createElement("div");
+  wrap.className = "msg " + (role === "user" ? "me" : "bot");
+  const who = document.createElement("span");
+  who.className = "who";
+  who.textContent = role === "user" ? "You" : "SNASKBOT";
+  const b = document.createElement("div");
+  b.className = "bubble";
+  b.innerHTML = html;
+  wrap.append(who, b);
+  chat.append(wrap);
+  scrollDown();
+  return b;
+}
+const DOTS = '<span class="dots" aria-label="SNASKBOT is typing"><i></i><i></i><i></i></span>';
+
+function buildWordmark() {
+  const w = $("wordmark");
+  [..."SNASKBOT"].forEach((ch, i) => {
+    const s = document.createElement("span");
+    s.textContent = ch;
+    s.style.setProperty("--i", i);
+    s.setAttribute("aria-hidden", "true");
+    if (i >= 5) s.className = "bot";
+    w.append(s);
+  });
+}
+function buildTicker() {
+  const items = TICKER.map((t) => `<span>${esc(t)}</span><span class="star">✶</span>`).join("");
+  $("track").innerHTML = items + items;
+}
+function renderChips() {
+  const chips = $("chips");
+  chips.innerHTML = "";
+  STARTERS.forEach((s, i) => {
+    const c = document.createElement("button");
+    c.type = "button";
+    c.className = "chip";
+    c.textContent = s;
+    c.style.setProperty("--i", i);
+    c.onclick = (ev) => { burst(ev.currentTarget); ask(s); };
+    chips.append(c);
+  });
+}
+function burst(el) {
+  if (REDUCED) return;
+  const r = el.getBoundingClientRect();
+  for (let i = 0; i < 7; i++) {
+    const h = document.createElement("span");
+    h.className = "burst";
+    h.textContent = i % 3 ? "♥" : "✶";
+    h.style.left = r.left + r.width / 2 + "px";
+    h.style.top = r.top + r.height / 2 + "px";
+    const a = Math.random() * Math.PI * 2, d = 40 + Math.random() * 50;
+    h.style.setProperty("--dx", Math.cos(a) * d + "px");
+    h.style.setProperty("--dy", Math.sin(a) * d - 30 + "px");
+    h.style.setProperty("--r", (Math.random() * 120 - 60) + "deg");
+    document.body.append(h);
+    setTimeout(() => h.remove(), 1000);
+  }
+}
+
+// Placeholder that types out teaser questions while the box is empty.
+let teaseTimer = null;
+function tease(n = 0) {
+  if (REDUCED) return;
+  clearTimeout(teaseTimer);
+  const text = TEASERS[n % TEASERS.length];
+  let i = 0;
+  const type = () => {
+    if (document.activeElement === box || box.value) { box.placeholder = TEASERS[0]; teaseTimer = setTimeout(() => tease(n), 1500); return; }
+    box.placeholder = text.slice(0, ++i) + (i < text.length ? "▍" : "");
+    teaseTimer = setTimeout(i < text.length ? type : () => tease(n + 1), i < text.length ? 45 + Math.random() * 40 : 2600);
+  };
+  type();
+}
+
+function setBusy(on) {
+  box.disabled = on;
+  sendBtn.classList.toggle("stop", on);
+  sendBtn.type = on ? "button" : "submit";
+  sendBtn.setAttribute("aria-label", on ? "Stop" : "Send");
+}
+function copyFor(code) {
+  switch (code) {
+    case "rate_limited": return "Whoa, too many questions at once. Breathe, then try again in a bit.";
+    case "session_expired": return "You got signed out of Claude. Sign in again and come back.";
+    case "refused": return "I'm not touching that one. Ask me something else.";
+    default: return "Something glitched on the way to the pink brain. Try again.";
+  }
+}
+
+async function callClaude(onText, signal) {
+  const history = turns.slice(-20);
+  if (MODE === "server") {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ messages: history }),
+      signal,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw { code: data.code || "upstream_error" };
+    onText(data.text);
+    return data.text;
+  }
+  const input = [
+    { role: "user", content: "Instructions for this whole chat. You are playing a character; stay in it.\n\n" + PERSONA + "\n\nThe visitor's messages follow." },
+    ...history,
+  ];
+  const { text } = await sample(input, { cache: false, modelTier: "quick", signal, onText: ({ text }) => onText(text) });
+  return text;
+}
+
+async function ask(text) {
+  text = text.trim();
+  if (!text) { form.classList.remove("shake"); void form.offsetWidth; form.classList.add("shake"); return; }
+  if (ctl) return;
+  app.classList.add("chatting");
+  sendBtn.classList.remove("fly"); void sendBtn.offsetWidth; sendBtn.classList.add("fly");
+  bubble("user", fmt(text));
+  turns.push({ role: "user", content: text });
+  const b = bubble("assistant", DOTS);
+
+  if (!live) {
+    const reply = CANNED[text] || "I'm in offline mode right now, so I can only answer the starter questions. Open me inside Claude to unleash the full chat.";
+    setTimeout(() => { b.innerHTML = fmt(reply); scrollDown(); }, 700);
+    turns.push({ role: "assistant", content: reply });
+    return;
+  }
+
+  ctl = new AbortController();
+  setBusy(true);
+  try {
+    const reply = await callClaude((t) => { b.innerHTML = fmt(t); scrollDown(); }, ctl.signal);
+    turns.push({ role: "assistant", content: reply });
+  } catch (e) {
+    const code = e && e.code;
+    if (code === "not_granted" || code === "sampling_disabled" || code === "capability_disabled" || code === "not_declared") {
+      goOffline();
+      const reply = CANNED[text];
+      b.innerHTML = fmt(reply || "No access to the pink brain from here, so I'm in offline mode. Tap a starter question for a canned classic.");
+      if (reply) turns.push({ role: "assistant", content: reply }); else turns.pop();
+    } else if (code === "cancelled" || (e && e.name === "AbortError")) {
+      if (e.text) { b.innerHTML = fmt(e.text); turns.push({ role: "assistant", content: e.text }); }
+      else { b.innerHTML = '<span class="note">Stopped.</span>'; turns.pop(); }
+    } else {
+      b.innerHTML = (e && e.text ? fmt(e.text) + "\n\n" : "") + '<span class="note">' + esc(copyFor(code)) + "</span>";
+      turns.pop();
+    }
+    scrollDown();
+  } finally {
+    ctl = null;
+    setBusy(false);
+    box.focus();
+  }
+}
+
+function setLive(on, msg) {
+  live = on;
+  modeEl.classList.toggle("is-live", on);
+  modeText.textContent = msg;
+}
+function goOffline() { setLive(false, "Offline mode: starter questions only"); }
+
+form.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const t = box.value;
+  box.value = "";
+  autosize();
+  burst(sendBtn);
+  ask(t);
+});
+sendBtn.addEventListener("click", () => { if (ctl) ctl.abort(); });
+box.addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); form.requestSubmit(); }
+});
+function autosize() { box.style.height = "auto"; box.style.height = Math.min(box.scrollHeight, 140) + "px"; }
+box.addEventListener("input", autosize);
+$("reset").addEventListener("click", () => {
+  if (ctl) ctl.abort();
+  turns = [];
+  chat.innerHTML = "";
+  app.classList.remove("chatting");
+});
+
+buildWordmark();
+buildTicker();
+renderChips();
+tease();
+
+(async () => {
+  if (MODE === "server") { setLive(true, "Live · powered by Claude"); return; }
+  try { sample = window.claude ? await window.claude.use("sample") : null; } catch { sample = null; }
+  if (sample) setLive(true, "Live · powered by Claude");
+  else goOffline();
+})();
+</script>
+
+</body>
+</html>

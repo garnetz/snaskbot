@@ -1,0 +1,14 @@
+{
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/chat",
+      "headers": [{ "key": "Content-Security-Policy", "value": "frame-ancestors 'self' https://snask.com https://*.snask.com" }]
+    },
+    {
+      "source": "/widget.js",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=300" }]
+    }
+  ]
+}

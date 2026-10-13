@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SNASKBOT widget demo</title>
+<style>
+  body { margin: 0; font: 16px/1.5 "Helvetica Neue", Arial, sans-serif; background: #fff; color: #1d0912; }
+  main { max-width: 720px; margin: 0 auto; padding: 64px 16px; }
+  h1 { font: 900 clamp(2.5rem, 8vw, 5rem)/.95 "Arial Black", Impact, sans-serif; margin: 0 0 24px; }
+  p { max-width: 60ch; }
+  .fake { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .fake div { aspect-ratio: 4/3; background: #f2e6ec; border-radius: 6px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Pretend this is snask.com</h1>
+  <p>This page stands in for the real website. The pink bubble in the bottom-right corner is the chat widget, added with one script tag. Click it and say hi.</p>
+  <div class="fake"><div></div><div></div><div></div><div></div></div>
+</main>
+<script src="/widget.js" defer></script>
+</body>
+</html>
