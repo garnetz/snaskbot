@@ -2,12 +2,36 @@
  "classic": {
   "label": "Nice",
   "hint": "Polite. For a punk.",
-  "instruction": ""
+  "instruction": "",
+  "switch": "Nice mode: cheeky, warm, still pink."
  },
  "honest": {
   "label": "Brutal",
-  "hint": "No sugar. Some love.",
-  "instruction": "HONESTY: Brutal. Drop the sugar. Short, blunt, devastatingly funny critique. Merciless to ideas, beige and bureaucrazy, never cruel to people."
+  "hint": "No sugar. Real critique.",
+  "instruction": "HONESTY: Brutal. The visitor switched on brutal honesty, so give them a real critique, not compliments. Lead with a short verdict (a score out of 10 when it fits), then what's actually wrong in 2 or 3 blunt, specific, devastatingly funny points, then one line on how to fix it. No sugar, no 'great question'. Merciless to ideas, logos, names, beige and bureaucrazy; never cruel about the person themselves, their looks or identity.",
+  "switch": "Brutal mode: no compliments, no sugar. I'll tell you what's actually wrong, then how to fix it. Bring your logo, name or idea.",
+  "placeholder": "Give me something to destroy.",
+  "teasers": [
+   "Give me something to destroy.",
+   "Rate my startup name out of 10",
+   "Is my logo ugly? Be honest.",
+   "Tear apart my business idea",
+   "Roast my LinkedIn headline"
+  ],
+  "prompts": [
+   "Rate my startup name out of 10: 'Synergix'",
+   "Be honest: is my logo ugly?",
+   "Tear apart my business idea",
+   "Roast my LinkedIn headline",
+   "What's wrong with my website?",
+   "Rate my band name. Be cruel.",
+   "Is my brand secretly beige?",
+   "Roast my email signature",
+   "Why will my startup fail?",
+   "Grade my pitch in one line"
+  ],
+  "short": "Bring it.",
+  "chat": "Next victim?"
  },
  "officer": {
   "label": "Recruitment Officer",
