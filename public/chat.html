@@ -458,6 +458,9 @@ textarea:focus-visible { outline: 0; }
 .modes-label { font: 800 .66rem/1 var(--font-display); font-stretch: 125%; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .modes-hint { flex-basis: 100%; text-align: center; font: italic 400 1rem/1.2 var(--font-romance); color: var(--muted); animation: rise .35s var(--ease-out) both; }
 .chatting .modes-hint { flex-basis: auto; text-align: left; }
+.modes-hint { display: none; }
+#mode:not(.offline) { display: none; }
+.foot { justify-content: center; opacity: .75; }
 @media (max-width: 560px) { .modes { gap: 2px; } .mode-btn { padding: 6px 7px; } .modes-label { margin-right: 2px; } .chatting .modes-hint { flex-basis: 100%; } }
 .mode-btn[aria-pressed="true"]::before { content: "● "; color: var(--hot); }
 
@@ -493,6 +496,7 @@ form { padding-left: 10px; }
 @media (max-width: 560px) { .chip { font-size: .8rem; padding: 6px 11px; } }
 
 /* reply tools + poster */
+.msg.bot:not(:last-child) .reply-tools { display: none; }
 .reply-tools { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 4px; padding-left: 4px; animation: rise .4s var(--ease-out) .3s both; }
 .reply-tools button { font: 700 .72rem/1 var(--font-body); color: var(--muted); background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .reply-tools button:hover { color: var(--ink); text-decoration-color: var(--hot); }
@@ -540,7 +544,7 @@ form { padding-left: 10px; }
     <section class="hero" aria-label="Intro">
       <div>
         <h1 class="wordmark" id="wordmark" aria-label="SNASKBOT"></h1>
-        <p class="lede">The unofficial chatty sidekick of SNASK. Ask about branding, our work, Shower Beer, or your <em>future romance</em> <span class="heart">♥</span></p>
+        <p class="lede">Your <em>future romance</em> <span class="heart">♥</span></p>
       </div>
     </section>
 
@@ -1222,7 +1226,7 @@ addEventListener("resize", () => { const sm = innerWidth < 560; if (sm !== wasSm
 function chipCount() {
   const chatting = $("app").classList.contains("chatting");
   const small = document.documentElement.classList.contains("embed") || innerWidth < 560;
-  return chatting ? (small ? 2 : 3) : (small ? 5 : 9);
+  return 3;
 }
 function renderChips(reshuffle) {
   const chips = $("chips");
@@ -1238,9 +1242,10 @@ function renderChips(reshuffle) {
     c.onclick = onclick;
     chips.append(c);
   };
-  if (imagesOk) add(ROAST_LABEL + " ↑", "chip roast", () => $("file").click());
   deck.slice(0, chipCount()).forEach((s) => add(s, "chip", (ev) => { burst(ev.currentTarget); ask(s); }));
-  add("Shuffle ↻", "chip shuffle", (ev) => { burst(ev.currentTarget); renderChips(true); });
+  add("↻", "chip shuffle", (ev) => { burst(ev.currentTarget); renderChips(true); });
+  chips.lastChild.setAttribute("aria-label", "Shuffle prompts");
+  chips.lastChild.title = "Shuffle";
 }
 function confetti(n) {
   if (REDUCED) return;
@@ -1577,7 +1582,7 @@ function setLive(on, msg) {
   modeEl.classList.toggle("is-live", on);
   modeText.textContent = msg;
 }
-function goOffline() { setLive(false, "Offline mode: starter questions only"); }
+function goOffline() { setLive(false, "Offline mode: starter questions only"); modeEl.classList.add("offline"); }
 
 form.addEventListener("submit", (ev) => {
   ev.preventDefault();
