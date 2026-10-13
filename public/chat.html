@@ -1125,7 +1125,7 @@ function setAttached(a) {
   attached = a;
   $("preview").hidden = !a;
   if (a) $("preview-img").src = a.url;
-  box.placeholder = a ? "Add a note, or just hit send" : TEASERS[0];
+  box.placeholder = a ? "Add a note, or just hit send" : fitsOneLine(TEASERS[0]) ? TEASERS[0] : "Ask me anything.";
 }
 function enableImages() {
   imagesOk = true;
@@ -1283,12 +1283,14 @@ const measure = document.createElement("canvas").getContext("2d");
 function fitsOneLine(text) {
   const cs = getComputedStyle(box);
   measure.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-  return measure.measureText(text + "  ⏎").width <= box.clientWidth - 4;
+  const room = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 8;
+  return measure.measureText(text + "  ⏎").width <= room;
 }
 function tease() {
   clearTimeout(teaseTimer);
   for (let tries = 0; tries < TEASERS.length && teaseN % TEASERS.length !== 0 && !fitsOneLine(TEASERS[teaseN % TEASERS.length]); tries++) teaseN++;
-  const text = TEASERS[teaseN % TEASERS.length];
+  let text = TEASERS[teaseN % TEASERS.length];
+  if (teaseN % TEASERS.length === 0 && !fitsOneLine(text)) text = "Ask me anything.";
   currentTeaser = teaseN % TEASERS.length === 0 ? null : text;
   if (REDUCED) { box.placeholder = currentTeaser ? text + "  ⏎" : text; return; }
   let i = 0;
@@ -1578,6 +1580,7 @@ function easterEggs(t) {
 function setLive(on, msg) {
   live = on;
   $("voice").hidden = !callOk();
+  if (typeof tease === "function" && !box.value) tease(); // the call button narrows the input, so re-pick a teaser that fits
   if (!app.classList.contains("chatting")) renderChips();
   modeEl.classList.toggle("is-live", on);
   modeText.textContent = msg;
