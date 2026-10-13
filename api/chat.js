@@ -22,6 +22,12 @@ export default async function handler(req, res) {
   while (clean.length && clean[0].role !== "user") clean.shift();
   if (!clean.length || clean.at(-1).role !== "user") return res.status(400).json({ code: "invalid_request" });
 
+  // Opt-in question log for learning what visitors ask. Only the question text, mode and turn: no IP or other personal data.
+  // Turn on with SNASK_LOG_QUESTIONS=1 and read it in the Vercel project's Logs tab.
+  if (process.env.SNASK_LOG_QUESTIONS === "1") {
+    console.log(JSON.stringify({ event: "question", mode: MODES[body.mode] ? body.mode : "classic", turn: clean.filter((m) => m.role === "user").length, image: !!body.image, q: clean.at(-1).content.slice(0, 300) }));
+  }
+
   // An image (logo or screenshot to roast) rides along with the newest message only.
   const img = body.image;
   if (img && IMAGE_TYPES.includes(img.media_type) && typeof img.data === "string" && img.data.length < 3_500_000) {

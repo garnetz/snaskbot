@@ -27,6 +27,10 @@ If you prefer the CLI, run `npm i -g vercel`, then `vercel` in this folder, `ver
 - Answers stream in word by word from `api/chat.js`. Visitors can attach a logo or screenshot (shrunk to 1024px in the browser) to get it roasted, and any answer can be saved as a pink poster image.
 - The shop is live: `api/catalog.js` reads products and prices from snask.com's public WooCommerce Store API and new cases from the Our Work page, caches them for six hours, and falls back to `catalog.json` if snask.com doesn't answer.
 
+## Seeing what visitors ask (off by default)
+
+Set `SNASK_LOG_QUESTIONS=1` in Vercel and every question shows up in the project's **Logs** tab as a line like `{"event":"question","mode":"classic","turn":1,"q":"Is beige a crime?"}`. It logs only the question text, the mode and the turn number, never IP addresses. Vercel keeps logs for a short time, so copy out anything you want to keep. If this runs on snask.com, mention it in their privacy policy.
+
 ## The brief form (delivery is OFF)
 
 When someone has a real project, the bot can show a "Got a real project?" form. Right now `api/brief.js` validates it but sends it nowhere, and the visitor is asked to copy it and email help@snask.com instead.

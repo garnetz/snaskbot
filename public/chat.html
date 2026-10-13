@@ -113,6 +113,44 @@ body {
 .wordmark .robot:hover { animation-play-state: paused; transform: rotate(14deg) scale(1.12); }
 @keyframes bob { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -.06em; rotate: 6deg; } }
 @media (prefers-reduced-motion: reduce) { .wordmark .robot { animation: none; } }
+
+/* the robot's face: blinks, looks around while thinking, gasps at beige, heart-eyes at pink */
+.robo .eye { transform-box: fill-box; transform-origin: center; animation: eyeblink 4.5s infinite; transition: transform .2s var(--ease-pop), opacity .2s; }
+.robo .hearts path { fill: var(--paper); stroke: var(--ink); stroke-width: 40; opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.3); transition: opacity .2s, transform .3s var(--ease-pop); }
+@keyframes eyeblink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+.robot.think .eye { animation: look 1.1s ease-in-out infinite; }
+@keyframes look { 0%, 100% { transform: translateX(-28%); } 50% { transform: translateX(28%); } }
+.robot.shock .eye { animation: none; transform: scale(1.4); }
+.robot.shock svg { animation: gasp .09s linear 10; }
+@keyframes gasp { 0% { transform: translateX(-6%) rotate(-4deg); } 100% { transform: translateX(6%) rotate(4deg); } }
+.robot.love .eye { animation: none; opacity: 0; }
+.robot.love .hearts path { opacity: 1; transform: scale(1); }
+.robot.love svg { animation: throb .45s ease-in-out 5; }
+@keyframes throb { 50% { transform: scale(1.15); } }
+
+/* mini header while chatting */
+.minibar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .5s var(--ease-out), opacity .4s, padding .5s var(--ease-out); }
+.chatting .minibar { max-height: 64px; opacity: 1; padding-block: 12px 2px; border-bottom: 2px solid var(--ink); }
+.mini-mark { display: inline-flex; align-items: center; gap: 3px; height: 34px; }
+.mini-mark .logo-letter { height: 20px; background: var(--ink); -webkit-mask: var(--mask) center / contain no-repeat; mask: var(--mask) center / contain no-repeat; }
+.mini-mark .text { font: 900 1.1rem/1 var(--font-display); font-stretch: 125%; letter-spacing: -.02em; }
+.mini-mark .robot { width: 32px; height: 32px; margin-left: 6px; display: grid; place-items: center; background: var(--hot); border-radius: 50%; border: 2px solid var(--ink); transform: rotate(-8deg); transition: transform .25s var(--ease-pop); }
+.mini-mark .robot:hover { transform: rotate(10deg) scale(1.1); }
+.mini-mark .robot svg { width: 72%; height: 72%; fill: var(--ink); }
+.mini-reset { font: 800 .66rem/1 var(--font-display); font-stretch: 125%; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: transparent; border: 2px solid var(--ink); border-radius: 999px; padding: 8px 12px; cursor: pointer; transition: background .2s, color .2s, transform .25s var(--ease-pop); }
+.mini-reset:hover { background: var(--ink); color: var(--pink); transform: rotate(-3deg); }
+.chatting .chat { padding-top: 14px; }
+
+/* short replies hit like a poster */
+.bot .bubble.punch { font: 900 1.45rem/1.1 var(--font-display); font-stretch: 112%; letter-spacing: -.015em; padding-block: 14px; }
+.embed .bot .bubble.punch { font-size: 1.2rem; }
+
+/* easter eggs */
+html.drain body { background: #cbbfae; }
+html.drain .app { filter: grayscale(1) sepia(.45) brightness(.95); }
+body, .app { transition: filter .35s ease, background .35s ease; }
+html.disco .app { animation: disco .22s steps(3) 8; }
+@keyframes disco { to { filter: hue-rotate(360deg) saturate(1.6); } }
 @keyframes drop {
   0% { transform: translateY(-120%) rotate(-12deg); opacity: 0; }
   60% { opacity: 1; }
@@ -399,7 +437,7 @@ form { padding-left: 10px; }
 @media (max-width: 560px) { .chip { font-size: .8rem; padding: 6px 11px; } }
 
 /* reply tools + poster */
-.reply-tools { display: flex; gap: 10px; margin-top: 4px; padding-left: 4px; animation: rise .4s var(--ease-out) .3s both; }
+.reply-tools { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 4px; padding-left: 4px; animation: rise .4s var(--ease-out) .3s both; }
 .reply-tools button { font: 700 .72rem/1 var(--font-body); color: var(--muted); background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .reply-tools button:hover { color: var(--ink); text-decoration-color: var(--hot); }
 [hidden] { display: none !important; }
@@ -447,6 +485,11 @@ form { padding-left: 10px; }
       </div>
     </section>
 
+    <div class="minibar" id="minibar">
+      <span class="mini-mark" id="mini-mark" aria-label="SNASKBOT"></span>
+      <button type="button" class="mini-reset" id="reset">Start over</button>
+    </div>
+
     <main class="chat" id="chat" aria-live="polite"></main>
 
     <div class="dock">
@@ -467,7 +510,7 @@ form { padding-left: 10px; }
         </form>
         <div class="foot">
           <span id="mode"><span class="live-dot"></span><span id="mode-text">Waking up the pink brain…</span></span>
-          <span>Unofficial prototype, not run by SNASK · <button type="button" id="reset">Start over</button></span>
+          <span>Unofficial prototype, not run by SNASK</span>
         </div>
       </div>
     </div>
@@ -507,6 +550,22 @@ const MODES = {"classic": {"label": "Nice", "hint": "Polite. For a punk.", "inst
 // SNASK logo letters (server build only; null in the Claude artifact, which uses a typeset wordmark).
 const LOGO = {"h": 169, "letters": [{"w": 110, "src": "data:image/png;base64,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"}, {"w": 102, "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGYAAACpCAYAAADZYUgDAAADQ0lEQVR42u3d0W3aYBTF8SOr77BB2KBsUDYIG9QblE5QOkGTDRiBbkA2oBs4G7gTpA82VYKiSEQKPvfe/5F4jvEPrk++fHYkQsj7spbUSXqa+LWTNJ/4XKwkHa/8vjtJm/MDaQ1Anr+OE+K0Bh9MSdLCDOX02k+AMpfUG7z3VTOOMMfcvvbV/uAsJc0M3vuqMZjnb2U7fqOveW2RC4xzZs9nbqU0AY7xy/jNAcYwP8b5D4xhHH6/AeaVfK400ppgx/vNqDkBc5Z9hZEWEaZEhW6CHvetfFcsSsOcWtoCGEYaMBeuCmyA8cyvjKsCTZL3sQPGd1XgDhhWBYB5x0ibA+OXmywjLRuMJH3NsCqQESbFSMsKM9M025+Ayb4qkBlGGv7iuQTGc6TtgPFdFdgC45lw25+qwEjB9gpUgrmJNNIqwUjDQucaGFYFgMlWoSvCSNPcFAXMBasCC2AYacBcENuboqrD2K4KAGNaoYEZYrfQ+QmTF6sCD3xjfMsAMAQYYAgwwBBgCDDAEGCA+YjcS3qExA+m1/AEV2I4yg6SfsLieY3ZSvoDjGfWkv4C45dOSR9FkqEu7yT9BsYzbdUK7Q5TtkJH+M2/ZIWOsiRTrkJHWisrVaEjwXTigdi2uatSoSMu+7cVRlpEmF7Jn7kcFeZUoe+B8cwmc4WO/qfltNeb6DDHrBU6w2aMlBU6yy6ZdCMtC0y6Cp1pX1mqCp1tw1+aCp1xJ2aK601GmBQVOuve5fAVOvOm8tAjLTNM6Aqd/TaMsBW6wv0x24gVugJMr4B706rcUXaU9B0Y3wr9AIxn1lEqdDWYMNebinct7yNU6Kq3k9tX6Kow9iOt8gMYrCt09Sdj2FZoHlliWqGBMb3eAGNaoYExrdDAvBxpe2AIMMAQYIAhwBBggCHAAEOAAYYAQ4ABhgADDAGGAAMMAQYYAgwwBBgCDDAEGGAIMAQYYAgwwBBgCDDAEGCAIcAAQ4AhwABDgAGGAEOAAYYAAwwBBhgCDAEGGAIMMAQYAsyb6Z1gOk7K/xxNzsVBkubjSXma+LUwOSmd07loJz6Q1micLSf+oG7OD2il4f+nXPMg9uPPdctS0u7KQAcN/y+NEHJx/gGs8OWQYDcf1AAAAABJRU5ErkJggg=="}, {"w": 109, "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG0AAACpCAYAAAAhgbP0AAAGcUlEQVR42u2dzXHjRhCFH2ndNUffFhloHMFCJx+NDIwMzBC4Nx/pDOAM6AiMzQCKwFAGYAT2AQMJovkrEpjXwHtVU6ra32Z/7J7fnllgHkrDTwfAn/hzFYAmtIr1wywmBscHQB5AAuDrjf/eK4AaQBlaB1W6QQmAFYBtcOa/I7Qq/J+J3H+5XHBaNRKkSwA6YTkeVQUBqGOtUPR97KdKYliCt5cGC0Ow9ttmbmlzNeLAYsjWAMjm0G+VE4C137ZTjbpsItF1Kur8lICtJwxrv+VTAFbMCFh/kCJgBlshYAInYAInYOfamhlYLkBHG+Uk3AuMrXmcQ7uZKDjnt3rO6oeRoP0O4GdtWJzVj2hPE5SxDUkVQVc3r7Q4sTS5HGGL5Yuy3tV6irlGqSj7fKuPbecMHWmKstt8tzr0G4sRIk3gPq9XHDhvMnSklfL7zdE2et/mwHE+cfITboEjn7ctR4DWhAn2i7LdTQvtUMTZG/5D4AynyIeRoXWpsgyz/rG1C1+auvftdcEhHsAjcYrMELlmbsyIa9CefrpkEdaj3VlvCCONYvo0NLgG7Ta++6RtW0JwmDK4EvepXMnJoKVTBVcMMNxmgbZi6mTvBa4YyL6CBNqGbXR0K7hiYNsYBieUa7mfBTfGUHgz90n2vcH5EezyGkHeD1wxol2NoN0HXDKiTSXDctaSGNoluwN/MOf5Ab/MJowsSYa/DJGWPhiA1kWcDz+b4Ly5RdibHgzZWoH4ZrgxtZQLBE0SNEnQBE0SNEnQBE0SNEnQBE0SNEnQJEEzqoeJfR6Hj4d8GkxwO8caNI/3x3/S3q9dWu3y0gPZQI/+DKIUbRFFieHPExZoj4C7E/YMbYep8/z99JZj3Fearnm5SdD2IqoAb11YLmjvymGnnLch+VKlMWHVUB21iSN0Gdrzirp6ycCQPwl91le53MaKyBrAPwJmI9J8iK4nudlGpOWId1eIIu0TKgD8KtfagOYUXbbSoxcwW5HWAXuUO21EmoAZgyZgxqAlAmYLmkO73yVghqBtNUq0BW0DrSGagpYB+E0uswPNwei7zHOGVmjgYQtaBuAXucoONKVFg9DWSot8OvV+WoL2mIDEpeflmSiTCPVwIsos7T5/x8diivLAn0nxXlWTTnGRoAD/oc0S5wsmzg2ycnAc9b75hHFCbnSB+1+Bmxj5oh6FtiE1tsLwt4Kn4K8tOAitITR07EHR2hK0HHyVKj5Sv56SfoH/B21LZFwdEVgnTwgu3R9NMUWYA4fYwKXLvYVhBu16qYlBVbBnx7j2mJLYlIPvGokKEZ8tPiWGFLAhX3RgmA6l/bzNMPBw5NAc4pcdv/VpDKlxDf5LWBqmhfSCIMosqWaINE8QZZYU1d5uEzTmY2o7GHle6kDfFmNX/3mJcR+NO6Qt7KmJabegfV7lnKGVRqHNNtJeYfeuxSbYHwVa7KGzZdVzhFYah1bFgpZCuiVFzi7SJEETNOm8XCxoVcQPbb0/9bGgNXP7pt5RSSxoMfVkGJxDpGt9Y0ea5RQZze7YfZplaFlMaLEjLRc0e5H2aBBcjohlzd1A5EXRdpVWDJPrOrITvhrq2zJEvhusg1YSOKMwAm0T2wAmaF/AfyprDbInVxpwVIV44nkZXdVMSeKcknCVJAHRAaQ+NBajHsnAORDfJJuArzDeEQCrQF6+W5IZWEfs4zw4H+ZLD01yGZ91HHvyvQJnkfxBaI7Y2C2G379KwH+DT3psksts9HqAvi4B76U3k7hmqX/dUnaHJanCyOd9g7Y4MVeyckvbLqTOqteaIyNBj/db6FLYvID0eXFi9v83JEpoyxOR9l3+4ZRuVp0YtBLAn3KRLWhdtO3kJlvQaqVJe9AQJp0alBiDBrRrf0qTxqDViHwCSboeGtAu92g0aQwaQrS9yG22oDUgu2VU0ARustAAwnt9Be1ycLlcaAsa0O5j/aSIswVNqdIotD64V7nUDrQOnIfWKU1B608Hvsm1dqB1WgN4Vj9nCxrQ7nwnAP6Sm+1A69JlFqJOgxQj0Paj7ptSpk05vD9RYulkbw2Oc/6p4F1WtbPuDbBU3hyUg7M2boWPxR5JZJtKxtSZBEdViFtSlZ35gkV91HZB3PclIX9nwdihroLoCjjK8LO54O+kB6JwSFVoT8XV7NAOQfS95nB9Zc8OH6trumZKC0xDCU5Xidaw/3DDm/4DI5IvY9ibCqMAAAAASUVORK5CYII="}, {"w": 110, "src": "data:image/png;base64,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"}, {"w": 112, "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAACpCAYAAADz0bmsAAAFPUlEQVR42u2d75HTWBDEu0jglAHKAGVwygBnsMrgRASYCM5koMvAZKDLQGSgzUAbAXywr1g421iy/nS/6a7SF6qA0f40o5nep/cAy7I4VAA4Avi24jUAOADINr73EkC38r1fuo4A8qnwhg0D7zaEtyMA9+tDXYy9iZYg8HoDePnGD+61qx17E3JBz6SWEN5/1116M7XmJqAawJ/E8ZX3AozasP1NHmNrgNfVkMf3ZUwJjaY9gHfE8b2MaeiiASwBfBR4N/cG+H9lIqVzVIyRAB4AvCWO7xlANfYvRQG4A/BEHmN1NhUMULB0fppqZEQA2AD4gzi+r+fOGAZ4uaN7Tz4y7B75B1IGmD/yZDOODNEAHslL5+iRIRLAPbjdlkkjQxSABfjdlkkjQwSA2bl0JjkyRAC4B7fb8tDIkDrAEsBfKY8MKQNUKJ0PjwwpA2wijAypAqzA7bbMNjKkCDDH6ddEIUaGFAGyl87PWHi5pDLAPbiXBX7FCouVVQEW4HZbXpZ876UAsCGPb4+VvvdQBHgAt1H9Zc3GSg1gCX63pVrzP1QCmAmUzt2SI4M6wAbcRvXiI4MywB243ZZVRgZVgDl56Vz9vacGsAG327LayKAIsAa327LqyKAGsAD3ssBNS6cCQPbSufrIoARwD263ZZOR4ZpKcO1SwRIP45429BmYgd9tqQzwdulkdls+sGUgU8kayEtny/hEMWUgc8e5yJrOKE4My3tvMEBNfQbxomEDvK3Zv2UwQJdOA1QeGQzw/q7zoBCoAV4faUoD1H//GaCwnrD9bvoG+KB2Bqit2gC19Q4TznAwQDczBmiA1uuZsDJAd6MGuKHeg/SEGwMUfxcaoAGG0VsQGtwGKJ6FBjhOdAa3AYqPFAY4XrUBaovK4DZA8WbGAA0wpGgMbgMU70YNcLooDG4DFH8XGqABhtbmBrcBimehAT6uTQ1uAxQfKdQBPpPEURvgNHgFTt/yba3NDG5lgBVOnz8fozczJbg32Ll07V/FX4BnoyIDxLTN5jqS2CqX0Nu6tmNSE7kbVcrAa094RhRj7gy8rFunYA4A/onazChkYH+H27EjitUAf7nKO++lF4s3RAn9hPv36mwillHmDOxG3ktOFHsWPQOnbLLaA/g30kjBDHA/sSFgKaN15BL6qL85kNxHETED5zjS5khyL1XEDJyjBS8QxOBmy8C5jrTpcNoueWstvoKbCeDzzC9+lmZmFwXg3BYUC8BFV3CnvKhpQACDO/VVaY0BaqsFx8q1xVZwR1gXmnQWGuB6WmQFdwSAPU6/zU9ypIiytP5IEkdtgNPLaJIruCN93JJkM2OABiijDgka3NG+Dzyk1o1GA8jSjc5mcEcDOCAxgzviJ9aNAWqrRUIGd9RNDpLJQgPcVg8b3FEB9kjE4I68TwzLSFEb4PQyKm9wR9+pSb6ZMUADlFYHcYPbm92JG9wGKG5wG6C4wW2A4s2MAZ7UQtTgNkDxLDRAPoCjDG4D/KEegga3AXKOFLUBTi+jUga3AYo3MwZogMmpg5DBbYCXdVDpRg2Quxv9rcFtgJc1QMTgNkDxZsYAr6uFgMFtgOJZaIAaAK8a3AZ4Wz3IDW4D1BkpagOcXkZpDW4DFG9mDNAAQ6gDqcFtgPfrwNiNGqBeN/qTwW2A92sAocFtgOLNjAGOUwsyg9sAxbPQAHUBPgHIDHC8ehAZ3AaoPVJUbzD+nFqL52fWv+6utj5rrxIspTRnLebY9tjSRjALC7afWXb+wzWfrE4w814rP//M1gTZYqUTsi3L+p2+A1i5hhfK5hxSAAAAAElFTkSuQmCC"}]};
 // Material Symbols "robot" (Apache 2.0), viewBox 0 -960 960 960.
+const ROBOT_BODY = "M200-120q-33 0-56.5-23.5T120-200v-400q0-100 70-170t170-70h240q100 0 170 70t70 170v400q0 33-23.5 56.5T760-120H200Zm0-80h560v-400q0-66-47-113t-113-47H360q-66 0-113 47t-47 113v400Z";
+const ROBOT_MOUTH = "M280-200v-80q0-33 23.5-56.5T360-360h240q33 0 56.5 23.5T680-280v80h-80v-80h-80v80h-80v-80h-80v80h-80Z";
+const HEART = "M0 70C-110 0-110-90-45-90C-20-90 0-70 0-50C0-70 20-90 45-90C110-90 110 0 0 70Z";
+function robotSVG() {
+  return `<svg class="robo" viewBox="0 -960 960 960" aria-hidden="true"><path d="${ROBOT_BODY}"/><path d="${ROBOT_MOUTH}"/>` +
+    `<circle class="eye" cx="360" cy="-560" r="80"/><circle class="eye" cx="600" cy="-560" r="80"/>` +
+    `<g class="hearts"><g transform="translate(360 -555)"><path d="${HEART}"/></g><g transform="translate(600 -555)"><path d="${HEART}"/></g></g></svg>`;
+}
+// Robot moods. "think" runs while a reply is on its way; shock and love are short reactions on top.
+let moodTimer = null;
+function robotMood(mood, ms) {
+  document.querySelectorAll(".robot").forEach((r) => { r.classList.remove("shock", "love"); if (mood) r.classList.add(mood); });
+  clearTimeout(moodTimer);
+  if (mood) moodTimer = setTimeout(() => robotMood(null), ms || 2000);
+}
+function robotThinking(on) { document.querySelectorAll(".robot").forEach((r) => r.classList.toggle("think", on)); }
 const ROBOT_PATH = "M200-120q-33 0-56.5-23.5T120-200v-400q0-100 70-170t170-70h240q100 0 170 70t70 170v400q0 33-23.5 56.5T760-120H200Zm0-80h560v-400q0-66-47-113t-113-47H360q-66 0-113 47t-47 113v400Zm103.5-303.5Q280-527 280-560t23.5-56.5Q327-640 360-640t56.5 23.5Q440-593 440-560t-23.5 56.5Q393-480 360-480t-56.5-23.5Zm240 0Q520-527 520-560t23.5-56.5Q567-640 600-640t56.5 23.5Q680-593 680-560t-23.5 56.5Q633-480 600-480t-56.5-23.5ZM280-200v-80q0-33 23.5-56.5T360-360h240q33 0 56.5 23.5T680-280v80h-80v-80h-80v80h-80v-80h-80v80h-80Zm-80 0h560-560Z";
 // Starter prompts. A random handful shows at a time; "Shuffle" deals a new hand.
 const STARTERS = [
@@ -637,6 +696,7 @@ function renderReply(b, raw, done) {
   text = text.replace(/\[\[[a-z]+:[^\]]*\]\]/g, "");
   text = text.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   b.innerHTML = fmt(text);
+  b.classList.toggle("punch", done && !cards.length && !wantsBrief && !text.includes("\n") && plain(text).length <= 70);
   if (cards.length) {
     const wrap = document.createElement("div");
     wrap.className = "cards";
@@ -722,11 +782,24 @@ function addReplyTools(b, text) {
   if (msg.querySelector(".reply-tools")) return;
   const tools = document.createElement("div");
   tools.className = "reply-tools";
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.textContent = "Make it a poster";
-  btn.onclick = () => openPoster(msg.dataset.question || "", text);
-  tools.append(btn);
+  const add = (label, fn) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = label;
+    btn.onclick = () => fn(btn);
+    tools.append(btn);
+  };
+  const answer = plain(text);
+  add("Copy", async (btn) => {
+    try { await navigator.clipboard.writeText(answer); btn.textContent = "Copied ♥"; }
+    catch { const r = document.createRange(); r.selectNodeContents(b); getSelection().removeAllRanges(); getSelection().addRange(r); btn.textContent = "Selected, now copy"; }
+    setTimeout(() => { btn.textContent = "Copy"; }, 1800);
+  });
+  if (MODE === "server" && navigator.share) add("Share", async () => {
+    const q = msg.dataset.question;
+    try { await navigator.share({ title: "SNASKBOT", text: (q ? `“${q}”\n\n` : "") + answer + "\n\n— SNASKBOT", url: location.origin }); } catch {}
+  });
+  add("Make it a poster", () => openPoster(msg.dataset.question || "", text));
   msg.append(tools);
 }
 function plain(s) {
@@ -952,7 +1025,7 @@ function buildWordmark() {
     r.className = "robot";
     r.style.setProperty("--i", LOGO.letters.length);
     r.setAttribute("aria-hidden", "true");
-    r.innerHTML = `<svg viewBox="0 -960 960 960"><path d="${ROBOT_PATH}"/></svg>`;
+    r.innerHTML = robotSVG();
     w.append(r);
     return;
   }
@@ -964,6 +1037,28 @@ function buildWordmark() {
     if (i >= 5) s.className = "bot";
     w.append(s);
   });
+}
+function buildMiniMark() {
+  const m = $("mini-mark");
+  if (LOGO) {
+    LOGO.letters.forEach((l) => {
+      const s = document.createElement("span");
+      s.className = "logo-letter";
+      s.style.setProperty("--mask", `url(${l.src})`);
+      s.style.aspectRatio = `${l.w} / ${LOGO.h}`;
+      m.append(s);
+    });
+  } else {
+    const t = document.createElement("span");
+    t.className = "text";
+    t.textContent = "SNASKBOT";
+    m.append(t);
+  }
+  const r = document.createElement("span");
+  r.className = "robot";
+  r.innerHTML = robotSVG();
+  r.onclick = () => robotMood("love", 1800);
+  m.append(r);
 }
 function buildTicker() {
   const items = TICKER.map((t) => `<span>${esc(t)}</span><span class="star">✶</span>`).join("");
@@ -999,6 +1094,14 @@ function renderChips(reshuffle) {
   if (imagesOk) add(ROAST_LABEL + " ↑", "chip roast", () => $("file").click());
   deck.slice(0, chipCount()).forEach((s) => add(s, "chip", (ev) => { burst(ev.currentTarget); ask(s); }));
   add("Shuffle ↻", "chip shuffle", (ev) => { burst(ev.currentTarget); renderChips(true); });
+}
+function confetti(n) {
+  if (REDUCED) return;
+  for (let k = 0; k < n; k++) setTimeout(() => burstAt(Math.random() * innerWidth, Math.random() * innerHeight * .8), k * 60);
+}
+function burstAt(x, y) {
+  const fake = { getBoundingClientRect: () => ({ left: x, top: y, width: 0, height: 0 }) };
+  burst(fake);
 }
 function burst(el) {
   if (REDUCED) return;
@@ -1116,6 +1219,7 @@ async function ask(text) {
   renderChips(true);
   sendBtn.classList.remove("fly"); void sendBtn.offsetWidth; sendBtn.classList.add("fly");
   const ub = bubble("user", fmt(text));
+  easterEggs(text);
   if (image && live) {
     const im = document.createElement("img");
     im.className = "sent";
@@ -1137,6 +1241,7 @@ async function ask(text) {
 
   ctl = new AbortController();
   setBusy(true);
+  robotThinking(true);
   try {
     const reply = await callClaude((t) => { renderReply(b, t, false); scrollDown(); }, ctl.signal, image && live ? image : null);
     renderReply(b, reply, true);
@@ -1159,9 +1264,23 @@ async function ask(text) {
     scrollDown();
   } finally {
     ctl = null;
+    robotThinking(false);
     setBusy(false);
     box.focus();
   }
+}
+
+// Easter eggs: say the magic words.
+function flashClass(cls, ms) {
+  const h = document.documentElement;
+  h.classList.remove(cls); void h.offsetWidth; h.classList.add(cls);
+  setTimeout(() => h.classList.remove(cls), ms);
+}
+function easterEggs(t) {
+  if (/snask\s*off/i.test(t)) { confetti(14); robotMood("love", 3000); }
+  else if (/\bbeige\b/i.test(t)) { flashClass("drain", 1500); robotMood("shock", 1600); }
+  else if (/\bdisco\b/i.test(t) && !REDUCED) { flashClass("disco", 1800); }
+  else if (/\bpink\b/i.test(t)) { robotMood("love", 2200); }
 }
 
 function setLive(on, msg) {
@@ -1192,11 +1311,13 @@ $("reset").addEventListener("click", () => {
   setAttached(null);
   turns = [];
   chat.innerHTML = "";
+  robotMood(null);
   app.classList.remove("chatting");
   renderChips(true);
 });
 
 buildWordmark();
+buildMiniMark();
 buildTicker();
 renderChips();
 tease();
