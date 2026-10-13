@@ -23,4 +23,4 @@ If you prefer the CLI, run `npm i -g vercel`, then `vercel` in this folder, `ver
 
 - Only snask.com, its subdomains and the Vercel site itself can show the chat. To allow other sites, edit the `frame-ancestors` line in `vercel.json`.
 - The 30-messages-per-10-minutes visitor limit is best effort, because Vercel can run several copies of the function. For real protection, add a rate-limit rule under the project's **Firewall** tab and keep the spend limit in the Claude Console.
-- To change the bot's voice, edit `persona.md`, then paste its text into `api/_persona.js`.
+- The bot's voice and facts live in `persona.md`, and the project and shop cards it can show live in `catalog.json`. `api/_persona.js` and `public/chat.html` are generated from them, so ask Claude in the project to rebuild after editing either file.

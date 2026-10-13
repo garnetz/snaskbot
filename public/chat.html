@@ -163,6 +163,62 @@ body {
 @keyframes hop { 0%, 60%, 100% { transform: none; } 30% { transform: translateY(-7px); } }
 .note { font-size: .8rem; color: var(--muted); font-style: italic; }
 
+/* rich answers: project + shop cards, follow-up buttons */
+.cards { display: grid; gap: 10px; margin-top: 10px; max-width: 420px; }
+.card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 12px;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 8px;
+  white-space: normal;
+  animation: pop .5s var(--ease-pop) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 120ms);
+  transition: transform .25s var(--ease-pop), box-shadow .25s;
+}
+.card:hover { transform: translateY(-3px) rotate(-.6deg); box-shadow: 5px 5px 0 var(--hot); }
+.thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--pink);
+  display: grid;
+  place-items: center;
+  font: 900 2rem/1 var(--font-display);
+  font-stretch: 125%;
+}
+.thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s var(--ease-out); }
+.card:hover .thumb img { transform: scale(1.08); }
+.card .meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.card .kind { font: 800 .62rem/1.2 var(--font-display); font-stretch: 125%; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.card b { font-weight: 800; font-size: .95rem; line-height: 1.2; }
+.card .blurb { font-size: .82rem; line-height: 1.3; }
+.card .price { align-self: flex-start; margin-top: 4px; font-weight: 800; font-size: .8rem; background: var(--ink); color: var(--pink); border-radius: 999px; padding: 2px 9px; }
+.card .go { font-size: .75rem; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+.asks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ask {
+  font: 600 .8rem/1.2 var(--font-body);
+  color: var(--ink);
+  background: var(--pink);
+  border: 1.5px dashed var(--ink);
+  border-radius: 999px;
+  padding: 6px 11px;
+  cursor: pointer;
+  animation: rise .4s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 250ms);
+  transition: transform .2s var(--ease-pop), background .2s;
+}
+.ask:hover { background: var(--hot); border-style: solid; transform: translateY(-2px) scale(1.04); }
+.ask::before { content: "→ "; }
+.bubble a:not(.card) { color: inherit; font-weight: 700; text-decoration-color: var(--hot); text-decoration-thickness: 2px; text-underline-offset: 2px; }
+.bubble a:not(.card):hover { background: var(--pink); }
+
 /* ── dock: chips + input ── */
 .dock { flex: none; padding-block: 0 calc(12px + env(safe-area-inset-bottom, 0px)); }
 .dock-inner { display: flex; flex-direction: column; }
@@ -277,6 +333,9 @@ textarea:focus-visible { outline: 0; }
 .embed .wordmark { font-size: 2.6rem; }
 .embed .lede { font-size: .95rem; }
 .embed .chip { font-size: .8rem; padding: 6px 11px; }
+.embed .chip.extra { display: none; }
+.embed .cards { max-width: 100%; }
+.embed .card { grid-template-columns: 76px 1fr; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -324,9 +383,25 @@ textarea:focus-visible { outline: 0; }
 <script>
 const PERSONA = "";
 if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add("embed");
+// The website widget tells us when it goes full screen, so we can drop the compact layout.
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && window.parent !== window) window.parent.postMessage({ snaskbot: "escape" }, "*");
+});
+window.addEventListener("message", (e) => {
+  if (e.source === window.parent && e.data && e.data.snaskbot === "size") document.documentElement.classList.toggle("embed", !e.data.full);
+});
 const MODE = window.SNASK_MODE || "artifact"; // "artifact" uses Claude in the viewer; "server" posts to /api/chat
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const CATALOG = {"case": {"hives-countdown": {"title": "Countdown to Shutdown", "client": "The Hives", "kind": "Music video", "blurb": "Corporate execs run the show while the band stays missing until the finale.", "url": "https://snask.com/case/the-hives-countdown-to-shutdown/", "img": "https://snask.com/wp-content/uploads/2023/06/thehives_0_web.png"}, "hives-enough": {"title": "Enough is Enough", "client": "The Hives", "kind": "Music video", "blurb": "The band alone in a boxing ring against a hostile crowd. No Rocky montages.", "url": "https://snask.com/case/the-hives-enough-is-enough/", "img": "https://snask.com/wp-content/uploads/2025/04/hives_thumb-1250x720.png"}, "viagra-boys": {"title": "Punk Rock Loser & Ain't No Thief", "client": "Viagra Boys", "kind": "Music videos", "blurb": "Two videos for the songs that open the album Cave World.", "url": "https://snask.com/case/viagra-boys-punk-rock-loser-aint-no-thief/", "img": "https://snask.com/wp-content/uploads/2022/04/00_viagra_boys_thumbnail-1.webp"}, "klarna-horse": {"title": "Long Haired Horse", "client": "Klarna", "kind": "Film", "blurb": "Part of Smoooth Situations: five handcrafted dream worlds.", "url": "https://snask.com/case/klarna-long-haired-horse/", "img": "https://snask.com/wp-content/uploads/2021/01/klarna_horse_thumbs2.png-1.webp"}, "klarna-smoooth": {"title": "Smoooth", "client": "Klarna", "kind": "Campaign", "blurb": "Film, photo and stills set in Klarna's heightened, smoooth lifestyle world.", "url": "https://snask.com/case/klarna-branded-content/", "img": "https://snask.com/wp-content/uploads/2021/04/SSP_HighHeeledCurling_Emotional_4x5-scaled.jpg"}, "love-korea": {"title": "Love Korea", "client": "ICON Magazine", "kind": "Rebrand", "blurb": "North Korea, rebranded around love. Free files, if they prove they're a democracy.", "url": "https://snask.com/case/north-korea-rebrand/", "img": "https://snask.com/wp-content/uploads/2018/09/northkorea.png"}, "shower-beer": {"title": "Shower Beer", "client": "SNASK", "kind": "Packaging & brand", "blurb": "Sweet but strong pale ale in a palm-friendly 18 cl bottle. Disco is dead.", "url": "https://snask.com/case/shower-beer/", "img": "https://snask.com/wp-content/uploads/2016/12/shower-beer_webthumb.png"}, "toggl": {"title": "Toggl rebrand", "client": "Toggl", "kind": "Rebrand", "blurb": "Three products, one brand: identity, logo, photos and films.", "url": "https://snask.com/case/toggl-rebrand-strategy-visual-identity-production/", "img": "https://snask.com/wp-content/uploads/2023/06/toggl_00_thumbnail.png"}, "xbox": {"title": "This is an Xbox", "client": "Xbox", "kind": "Film", "blurb": "One continuous flowing film of Xbox on every device in everyday life.", "url": "https://snask.com/case/xbox-this-is-an-xbox/", "img": "https://snask.com/wp-content/uploads/2024/11/02_xbox_still-1250x703.png"}, "curaprox": {"title": "House of Mouth", "client": "Curaprox", "kind": "Brand film", "blurb": "A surreal film where everything starts with the mouth.", "url": "https://snask.com/case/curaprox-house-of-mouth/", "img": "https://snask.com/wp-content/uploads/2026/04/house-of-mouth_2-2-3.jpg"}, "meta": {"title": "Personalization II", "client": "Meta", "kind": "Films", "blurb": "A yeti, a witch and a headless horseman explain your feed.", "url": "https://snask.com/case/meta-personalization-ii/", "img": "https://snask.com/wp-content/uploads/2025/09/meta_thumb.png"}, "cheezington": {"title": "Cheezington!", "client": "Oddlygood", "kind": "Campaign", "blurb": "Launch films for a vegan cheese with a very odd name.", "url": "https://snask.com/case/oddlygood-cheezington/", "img": "https://snask.com/wp-content/uploads/2024/10/20240625_oddlygood44826-1250x833.png"}, "fortnox": {"title": "Fortnox rebrand", "client": "Fortnox", "kind": "Rebrand", "blurb": "Bookkeeping software turned trusted hub for businesses and society.", "url": "https://snask.com/case/fortnox/", "img": "https://snask.com/wp-content/uploads/2022/08/00-Fortnox-Behance-Profile.jpg-1.webp"}, "schuh": {"title": "schuh rebrand", "client": "schuh", "kind": "Rebrand", "blurb": "UK shoe retailer, refocused from products to people.", "url": "https://snask.com/case/schuh-rebrand-of-uk-shoe-retailer/", "img": "https://snask.com/wp-content/uploads/2020/05/schuh_thumb2.png-1.webp"}, "spotify-dok": {"title": "Dok podcast identity", "client": "Spotify", "kind": "Identity", "blurb": "A flexible type system so any episode title fits on one line.", "url": "https://snask.com/case/spotify-doks-podcast-branding/", "img": "https://snask.com/wp-content/uploads/2021/05/spotify_thumb-1.webp"}, "ica-stop": {"title": "ICA Stop T\u00e4by", "client": "ICA", "kind": "Store & brand", "blurb": "A cluttered family grocery store turned food destination.", "url": "https://snask.com/case/ica-stop-taby-branding-concept-design-video/", "img": "https://snask.com/wp-content/uploads/2024/02/ica-stop_02_2x3.jpg"}, "lensway": {"title": "Lensway rebrand films", "client": "Lensway", "kind": "Stop motion", "blurb": "Eyewear brand rebuilt around eyes, bold colour and stop motion.", "url": "https://snask.com/case/lensway-rebrand-films/", "img": "https://snask.com/wp-content/uploads/2018/05/webthumb.png-1.webp"}}, "shop": {"pink-lies-jumper": {"title": "Pink Lies Jumper", "kind": "Unisex jumper", "price": "129 EUR", "url": "https://snask.com/product/pink-lies-jumper/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-LIES.jpg"}, "book": {"title": "Make Enemies & Gain Fans", "kind": "Book, 3rd and final edition", "price": "36 EUR", "url": "https://snask.com/product/make-enemies-gain-fans-3rd-and-final-edition-in-holographic-cover/", "img": "https://snask.com/wp-content/uploads/2024/11/snask_ncover_hori.jpg"}, "snask-off-tee": {"title": "SNASK Off! T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/snask-off-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-SNASK-OFF-TS-01.jpg"}, "pink-tiger-tee": {"title": "Pink Tiger T-shirt", "kind": "Unisex tee", "price": "45 EUR", "url": "https://snask.com/product/pink-tiger-t-shirt/", "img": "https://snask.com/wp-content/uploads/2021/04/PP-PINK-TIGER.jpg"}, "extremely-right-poster": {"title": "Just Because You Are Extremely Right Doesn't Mean You Are Correct", "kind": "Poster", "price": "15 EUR", "url": "https://snask.com/product/extremely-right-poster/", "img": "https://snask.com/wp-content/uploads/2021/04/Poster-PP.jpg"}, "stay-pink-poster": {"title": "Stay Pink", "kind": "Poster", "price": "25 EUR", "url": "https://snask.com/product/poster-stay-pink/", "img": "https://snask.com/wp-content/uploads/2021/03/PP-Poster-Stay-Gold.jpg"}, "champagne-mugs": {"title": "Pink Champagne Mugs", "kind": "Handmade with Kaia Keramik", "price": "60 EUR", "url": "https://snask.com/product/snask-pink-champagne-mugs-handmade-by-kaia/", "img": "https://snask.com/wp-content/uploads/2023/10/kaia-x-snask-clean-image-2.jpg"}, "stickers": {"title": "Stickers Pack", "kind": "Stickers", "price": "10 EUR", "url": "https://snask.com/product/stickers-pack/", "img": ""}}};
+const EXTRA_STARTERS = [
+  "Show me your best music videos",
+  "What should I buy my mum in the shop?",
+  "Name my band. We're terrible.",
+  "Why did you rebrand North Korea?",
+  "Make my wedding speech more punk",
+  "Explain branding like a first date",
+];
 const STARTERS = [
   "You rebranded North Korea. Do my ex next.",
   "My boss wants it 'more corporate'. Help.",
@@ -339,21 +414,33 @@ const STARTERS = [
   "Write my dating profile, SNASK style",
   "Most SNASK thing in the shop?",
 ];
-const TEASERS = ["Ask me anything. Be brave.", "Should I get my logo as a neck tattoo?", "Is Comic Sans punk?", "Rebrand my Monday.", "Hej! Vad gör SNASK?"];
+const TEASERS = ["Ask me anything. Be brave.", "Should I get my logo as a neck tattoo?", "Is Comic Sans punk?", "Rebrand my Monday.", "Make my LinkedIn less beige", "What would SNASK name my dog?", "Hej! Vad gör SNASK?"];
 const TICKER = ["SNASK OFF!", "We are your future romance", "Walk until you see the pink bar", "Bureaucrazy is dead", "Make enemies & gain fans", "Stay pink", "Disco is dead, drink Shower Beer"];
 
 // Used only when Claude can't be reached from this view.
 const CANNED = {
-  "You rebranded North Korea. Do my ex next.": "Love Korea came with one condition: prove you're a free democracy first. Your ex gets the same deal. New name: **Lesson.** Tagline: *\"Love is not about being perfect. Clearly.\"* Files available once they apologise.",
+  "You rebranded North Korea. Do my ex next.": "Love Korea came with one condition: prove you're a free democracy first. Your ex gets the same deal. New name: **Lesson.** Tagline: *\"Love is not about being perfect. Clearly.\"* Files available once they apologise.\n[[case:love-korea]]\n[[ask:Write my dating profile, SNASK style]]",
   "My boss wants it 'more corporate'. Help.": "Classic. Remind them: just because you wear a black suit doesn't mean you're a goddamn professional. Then make it 10% more corporate by adding one (1) navy pixel. Pink stays.",
-  "Pitch a Viagra Boys video. Budget: one kebab.": "Open on the kebab. Slow motion. The band fights over the last falafel in a laundromat at 3am, lit only by a vending machine. Final shot: the kebab wins. We've done Punk Rock Loser and Ain't No Thief, so trust us, it works.",
+  "Pitch a Viagra Boys video. Budget: one kebab.": "Open on the kebab. Slow motion. The band fights over the last falafel in a laundromat at 3am, lit only by a vending machine. Final shot: the kebab wins. We've done this before, so trust us, it works.\n[[case:viagra-boys]]\n[[ask:Show me your best music videos]]\n[[ask:Name my band. We're terrible.]]",
+  "Show me your best music videos": "Loud bands, louder visuals. Here's the good stuff.\n[[case:hives-countdown]]\n[[case:hives-enough]]\n[[case:viagra-boys]]\n[[ask:Pitch a Viagra Boys video. Budget: one kebab.]]",
+  "What should I buy my mum in the shop?": "If she's elegant: pink champagne mugs. If she's opinionated: the Extremely Right poster. If she's both, you were raised well.\n[[shop:champagne-mugs]]\n[[shop:extremely-right-poster]]\n[[ask:Most SNASK thing in the shop?]]",
+  "Name my band. We're terrible.": "Embrace it. Your band is now **Rehearsal Space Romance.** Debut album: *Three Chords, Zero Regrets.* Merch: pink, obviously.\n[[ask:Pitch a Viagra Boys video. Budget: one kebab.]]",
+  "Why did you rebrand North Korea?": "ICON Magazine asked us to rethink a brand. We picked the one that needed love the most. The files are free, the moment they prove they're a free democracy.\n[[case:love-korea]]\n[[ask:You rebranded North Korea. Do my ex next.]]",
+  "Make my wedding speech more punk": "Open with: *\"If you love someone, let it show.\"* Close with: *\"Having enemies proves you stood up for something. Welcome to the family.\"* Drop the mic gently, it's rented.",
+  "Explain branding like a first date": "Marketing is asking someone out. Branding is the reason they say YES. Show up as yourself, smell nice, and never call them your 'target group'.\n[[ask:Write my dating profile, SNASK style]]",
   "Is beige a crime?": "Not legally. Spiritually, yes. Beige never started a revolution, never got a second date, never sold out a batch of Shower Beer. Stay pink.",
   "Can I work at SNASK if I can't make coffee?": "Perfect, we don't expect you to make coffee. No open jobs are listed right now, but our Recruitment Officer George Michael reads carelesswhisper@snask.com. Send something pretty in pink.",
   "Rebrand my cat. Her name is Doris.": "Doris is no longer Doris. She is **DORIS.** All caps, gold foil collar, a signature hiss as her sonic logo. Tagline: *\"I knocked it off the table because I love you.\"*",
-  "What's Shower Beer and is it legal?": "Totally legal. A sweet but strong pale ale in a palm-friendly 18cl bottle, screen-printed in SNASK pink. Disco is dead and modern adults drink Shower Beer. Tom Hanks loves it, apparently.",
+  "What's Shower Beer and is it legal?": "Totally legal. A sweet but strong pale ale in a palm-friendly 18cl bottle, screen-printed in SNASK pink. Disco is dead and modern adults drink Shower Beer. Tom Hanks loves it, apparently.\n[[case:shower-beer]]",
   "Roast my startup name: 'Synergix'": "Synergix sounds like a printer driver that crashes on Fridays. Brands are built on emotions, and right now the emotion is 'please update to version 4.2'.",
   "Write my dating profile, SNASK style": "Doctor of disturbance. Wizard of disruption. Allergic to beige and bureaucrazy. Looking for my future romance, or at least someone to split a Shower Beer with. Swipe pink.",
-  "Most SNASK thing in the shop?": "The Pink Lies Jumper (129 EUR last I checked) or the poster that says *Just Because You Are Extremely Right Doesn't Mean You Are Correct*. Hang it above your boss's desk. snask.com/shop",
+  "Should I get my logo as a neck tattoo?": "Only if the logo is good enough to survive a job interview. If it's beige, absolutely not. If it's pink, we'll hold your hand.",
+  "Is Comic Sans punk?": "Comic Sans is punk the way a dad in a leather jacket is punk. Respect the commitment. Never use it for your bank.",
+  "Rebrand my Monday.": "Monday is now **MONDAY OFF!** New tone of voice: no meetings before coffee, no coffee before love. Tagline: *\"The week starts when we say so.\"*",
+  "Make my LinkedIn less beige": "Step one: delete the word 'synergy'. Step two: replace your headline with what you'd say at a bar. Step three: pink profile banner. You're welcome.",
+  "What would SNASK name my dog?": "Depends on the dog. Small and loud: **Shower Beer.** Big and gentle: **Future Romance.** Chaotic: **Bureaucrazy.**",
+  "Hej! Vad gör SNASK?": "Hej! SNASK är en byrå i Stockholm som gör kick-ass branding, design och film. Musikvideor för The Hives och Viagra Boys, rebrands för Toggl och Fortnox, och Shower Beer. Gå tills du ser den rosa baren.",
+  "Most SNASK thing in the shop?": "The Pink Lies Jumper, or the poster you hang above your boss's desk. Prices from when I last checked the [shop](https://snask.com/shop/).\n[[shop:pink-lies-jumper]]\n[[shop:extremely-right-poster]]\n[[ask:What should I buy my mum in the shop?]]",
 };
 
 const $ = (id) => document.getElementById(id);
@@ -367,7 +454,72 @@ function esc(s) { return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;
 function fmt(s) {
   return esc(s)
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>")
+    .replace(/\[([^\]\n]+)\]\((https:\/\/[^\s)"]+)\)/g, (m, label, url) => safeUrl(url) ? `<a href="${url}" target="_blank" rel="noopener">${label}</a>` : label);
+}
+const LINK_HOSTS = ["snask.com", "www.snask.com", "showerbeer.se", "www.instagram.com", "instagram.com", "vimeo.com", "www.behance.net"];
+function safeUrl(u) { try { const x = new URL(u.replace(/&amp;/g, "&")); return x.protocol === "https:" && LINK_HOSTS.includes(x.hostname); } catch { return false; } }
+
+// Turn the bot's [[case:id]], [[shop:id]] and [[ask:question]] tokens into cards and buttons.
+function renderReply(b, raw, done) {
+  let text = raw.replace(/\[\[[^\]]*\]?$/, "");
+  const cards = [], asks = [];
+  text = text.replace(/\[\[(case|shop):([a-z0-9-]+)\]\]/g, (m, kind, id) => { if (CATALOG[kind] && CATALOG[kind][id] && cards.length < 3) cards.push([kind, id]); return ""; });
+  text = text.replace(/\[\[ask:([^\]\n]{1,90})\]\]/g, (m, q) => { if (asks.length < 3) asks.push(q.trim()); return ""; });
+  text = text.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  b.innerHTML = fmt(text);
+  if (cards.length) {
+    const wrap = document.createElement("div");
+    wrap.className = "cards";
+    cards.forEach(([kind, id], i) => wrap.append(card(kind, CATALOG[kind][id], i)));
+    b.append(wrap);
+  }
+  if (done && asks.length) {
+    const wrap = document.createElement("div");
+    wrap.className = "asks";
+    asks.forEach((q, i) => {
+      const a = document.createElement("button");
+      a.type = "button";
+      a.className = "ask";
+      a.textContent = q;
+      a.style.setProperty("--i", i);
+      a.onclick = () => { burst(a); ask(q); };
+      wrap.append(a);
+    });
+    b.append(wrap);
+  }
+}
+function card(kind, c, i) {
+  const a = document.createElement("a");
+  a.className = "card";
+  a.href = c.url;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.style.setProperty("--i", i);
+  const thumb = document.createElement("div");
+  thumb.className = "thumb";
+  thumb.textContent = (c.client || c.title)[0];
+  if (c.img) {
+    const img = document.createElement("img");
+    img.src = c.img;
+    img.alt = "";
+    img.loading = "lazy";
+    img.onerror = () => img.remove();
+    thumb.append(img);
+  }
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  const k = document.createElement("span");
+  k.className = "kind";
+  k.textContent = kind === "case" ? `${c.client} · ${c.kind}` : c.kind;
+  const t = document.createElement("b");
+  t.textContent = c.title;
+  meta.append(k, t);
+  if (c.blurb) { const s = document.createElement("span"); s.className = "blurb"; s.textContent = c.blurb; meta.append(s); }
+  if (c.price) { const p = document.createElement("span"); p.className = "price"; p.textContent = c.price; meta.append(p); }
+  else { const g = document.createElement("span"); g.className = "go"; g.textContent = "See the case"; meta.append(g); }
+  a.append(thumb, meta);
+  return a;
 }
 function scrollDown() { chat.scrollTop = chat.scrollHeight; }
 function bubble(role, html) {
@@ -404,10 +556,10 @@ function buildTicker() {
 function renderChips() {
   const chips = $("chips");
   chips.innerHTML = "";
-  STARTERS.forEach((s, i) => {
+  [...STARTERS, ...EXTRA_STARTERS].forEach((s, i) => {
     const c = document.createElement("button");
     c.type = "button";
-    c.className = "chip";
+    c.className = i < STARTERS.length ? "chip" : "chip extra";
     c.textContent = s;
     c.style.setProperty("--i", i);
     c.onclick = (ev) => { burst(ev.currentTarget); ask(s); };
@@ -433,19 +585,28 @@ function burst(el) {
 }
 
 // Placeholder that types out teaser questions while the box is empty.
+// Pressing Send (or Enter) on an empty box sends the teaser that's showing; Tab copies it in to edit.
 let teaseTimer = null;
-function tease(n = 0) {
-  if (REDUCED) return;
+let teaseN = 0;
+let currentTeaser = null;
+function tease() {
   clearTimeout(teaseTimer);
-  const text = TEASERS[n % TEASERS.length];
+  const text = TEASERS[teaseN % TEASERS.length];
+  currentTeaser = teaseN % TEASERS.length === 0 ? null : text;
+  if (REDUCED) { box.placeholder = currentTeaser ? text + "  ⏎" : text; return; }
   let i = 0;
   const type = () => {
-    if (document.activeElement === box || box.value) { box.placeholder = TEASERS[0]; teaseTimer = setTimeout(() => tease(n), 1500); return; }
-    box.placeholder = text.slice(0, ++i) + (i < text.length ? "▍" : "");
-    teaseTimer = setTimeout(i < text.length ? type : () => tease(n + 1), i < text.length ? 45 + Math.random() * 40 : 2600);
+    if (box.value) { teaseTimer = setTimeout(type, 1500); return; }
+    if (document.activeElement === box) { box.placeholder = currentTeaser ? text + "  ⏎" : text; teaseTimer = setTimeout(type, 1500); return; }
+    i = Math.min(i + 1, text.length);
+    const done = i === text.length;
+    box.placeholder = text.slice(0, i) + (done ? (currentTeaser ? "  ⏎" : "") : "▍");
+    if (done) teaseTimer = setTimeout(() => { teaseN++; tease(); }, 3200);
+    else teaseTimer = setTimeout(type, 45 + Math.random() * 40);
   };
   type();
 }
+function nextTeaser() { teaseN++; tease(); }
 
 function setBusy(on) {
   box.disabled = on;
@@ -496,7 +657,7 @@ async function ask(text) {
 
   if (!live) {
     const reply = CANNED[text] || "I'm in offline mode right now, so I can only answer the starter questions. Open me inside Claude to unleash the full chat.";
-    setTimeout(() => { b.innerHTML = fmt(reply); scrollDown(); }, 700);
+    setTimeout(() => { renderReply(b, reply, true); scrollDown(); }, 700);
     turns.push({ role: "assistant", content: reply });
     return;
   }
@@ -504,17 +665,19 @@ async function ask(text) {
   ctl = new AbortController();
   setBusy(true);
   try {
-    const reply = await callClaude((t) => { b.innerHTML = fmt(t); scrollDown(); }, ctl.signal);
+    const reply = await callClaude((t) => { renderReply(b, t, false); scrollDown(); }, ctl.signal);
+    renderReply(b, reply, true);
+    scrollDown();
     turns.push({ role: "assistant", content: reply });
   } catch (e) {
     const code = e && e.code;
     if (code === "not_granted" || code === "sampling_disabled" || code === "capability_disabled" || code === "not_declared") {
       goOffline();
       const reply = CANNED[text];
-      b.innerHTML = fmt(reply || "No access to the pink brain from here, so I'm in offline mode. Tap a starter question for a canned classic.");
+      if (reply) renderReply(b, reply, true); else b.innerHTML = fmt("No access to the pink brain from here, so I'm in offline mode. Tap a starter question for a canned classic.");
       if (reply) turns.push({ role: "assistant", content: reply }); else turns.pop();
     } else if (code === "cancelled" || (e && e.name === "AbortError")) {
-      if (e.text) { b.innerHTML = fmt(e.text); turns.push({ role: "assistant", content: e.text }); }
+      if (e.text) { renderReply(b, e.text, true); turns.push({ role: "assistant", content: e.text }); }
       else { b.innerHTML = '<span class="note">Stopped.</span>'; turns.pop(); }
     } else {
       b.innerHTML = (e && e.text ? fmt(e.text) + "\n\n" : "") + '<span class="note">' + esc(copyFor(code)) + "</span>";
@@ -537,7 +700,8 @@ function goOffline() { setLive(false, "Offline mode: starter questions only"); }
 
 form.addEventListener("submit", (ev) => {
   ev.preventDefault();
-  const t = box.value;
+  let t = box.value;
+  if (!t.trim() && currentTeaser) { t = currentTeaser; nextTeaser(); }
   box.value = "";
   autosize();
   burst(sendBtn);
@@ -546,6 +710,7 @@ form.addEventListener("submit", (ev) => {
 sendBtn.addEventListener("click", () => { if (ctl) ctl.abort(); });
 box.addEventListener("keydown", (ev) => {
   if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); form.requestSubmit(); }
+  if (ev.key === "Tab" && !ev.shiftKey && !box.value && currentTeaser) { ev.preventDefault(); box.value = currentTeaser; autosize(); }
 });
 function autosize() { box.style.height = "auto"; box.style.height = Math.min(box.scrollHeight, 140) + "px"; }
 box.addEventListener("input", autosize);
