@@ -1,6 +1,10 @@
 {
-  "classic": { "label": "Classic", "instruction": "" },
-  "honest": { "label": "Brutally honest", "instruction": "MODE: Brutally honest. Drop the sugar. Short, blunt, devastatingly funny critique. Merciless to ideas, beige and bureaucrazy, never cruel to people." },
-  "svenska": { "label": "Svenska", "instruction": "MODE: Svenska. Answer in Swedish whatever language the visitor writes in. Stockholm slang welcome." },
-  "toast": { "label": "Wedding toast", "instruction": "MODE: Wedding toast. Phrase every answer as an over-the-top, heartfelt punk wedding toast (raise your glasses, tears, love). Still answer the question. Max 120 words." }
+ "classic": {
+  "label": "Classic",
+  "instruction": ""
+ },
+ "honest": {
+  "label": "Brutally honest",
+  "instruction": "MODE: Brutally honest. Drop the sugar. Short, blunt, devastatingly funny critique. Merciless to ideas, beige and bureaucrazy, never cruel to people."
+ }
 }
