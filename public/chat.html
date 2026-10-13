@@ -280,7 +280,7 @@ textarea {
   padding-block: 10px;
   max-height: 140px;
 }
-textarea::placeholder { color: var(--muted); opacity: .8; }
+textarea::placeholder { color: var(--muted); opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .send {
   flex: none;
   width: 48px;
@@ -414,7 +414,7 @@ const STARTERS = [
   "Write my dating profile, SNASK style",
   "Most SNASK thing in the shop?",
 ];
-const TEASERS = ["Ask me anything. Be brave.", "Should I get my logo as a neck tattoo?", "Is Comic Sans punk?", "Rebrand my Monday.", "Make my LinkedIn less beige", "What would SNASK name my dog?", "Hej! Vad gör SNASK?"];
+const TEASERS = ["Ask me anything. Be brave.", "Should I get my logo as a neck tattoo?", "Is Comic Sans punk?", "Rebrand my Monday.", "Make my LinkedIn less beige", "Name my dog", "What would SNASK name my dog?", "Hej! Vad gör SNASK?"];
 const TICKER = ["SNASK OFF!", "We are your future romance", "Walk until you see the pink bar", "Bureaucrazy is dead", "Make enemies & gain fans", "Stay pink", "Disco is dead, drink Shower Beer"];
 
 // Used only when Claude can't be reached from this view.
@@ -438,6 +438,7 @@ const CANNED = {
   "Is Comic Sans punk?": "Comic Sans is punk the way a dad in a leather jacket is punk. Respect the commitment. Never use it for your bank.",
   "Rebrand my Monday.": "Monday is now **MONDAY OFF!** New tone of voice: no meetings before coffee, no coffee before love. Tagline: *\"The week starts when we say so.\"*",
   "Make my LinkedIn less beige": "Step one: delete the word 'synergy'. Step two: replace your headline with what you'd say at a bar. Step three: pink profile banner. You're welcome.",
+  "Name my dog": "Depends on the dog. Small and loud: **Shower Beer.** Big and gentle: **Future Romance.** Chaotic: **Bureaucrazy.**",
   "What would SNASK name my dog?": "Depends on the dog. Small and loud: **Shower Beer.** Big and gentle: **Future Romance.** Chaotic: **Bureaucrazy.**",
   "Hej! Vad gör SNASK?": "Hej! SNASK är en byrå i Stockholm som gör kick-ass branding, design och film. Musikvideor för The Hives och Viagra Boys, rebrands för Toggl och Fortnox, och Shower Beer. Gå tills du ser den rosa baren.",
   "Most SNASK thing in the shop?": "The Pink Lies Jumper, or the poster you hang above your boss's desk. Prices from when I last checked the [shop](https://snask.com/shop/).\n[[shop:pink-lies-jumper]]\n[[shop:extremely-right-poster]]\n[[ask:What should I buy my mum in the shop?]]",
@@ -589,8 +590,16 @@ function burst(el) {
 let teaseTimer = null;
 let teaseN = 0;
 let currentTeaser = null;
+// Only use teasers that fit on one line of the input at its current width (plus room for the ⏎).
+const measure = document.createElement("canvas").getContext("2d");
+function fitsOneLine(text) {
+  const cs = getComputedStyle(box);
+  measure.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  return measure.measureText(text + "  ⏎").width <= box.clientWidth - 4;
+}
 function tease() {
   clearTimeout(teaseTimer);
+  for (let tries = 0; tries < TEASERS.length && teaseN % TEASERS.length !== 0 && !fitsOneLine(TEASERS[teaseN % TEASERS.length]); tries++) teaseN++;
   const text = TEASERS[teaseN % TEASERS.length];
   currentTeaser = teaseN % TEASERS.length === 0 ? null : text;
   if (REDUCED) { box.placeholder = currentTeaser ? text + "  ⏎" : text; return; }
