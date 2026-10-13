@@ -238,7 +238,7 @@ body {
   margin-top: 16px;
   order: 2;
 }
-.chatting .chips { order: -1; margin: 0 0 10px; }
+.chatting .chips { display: none; } /* once you talk, only the bot's own follow-ups show */
 @media (max-width: 560px) { .chips { gap: 6px; } }
 .chip {
   flex: none;
@@ -1038,6 +1038,8 @@ function tease() {
   if (REDUCED) { box.placeholder = currentTeaser ? text + "  ⏎" : text; return; }
   let i = 0;
   const type = () => {
+    // mid-chat, random teasers would change the subject, so just invite a reply
+    if (app.classList.contains("chatting")) { currentTeaser = null; box.placeholder = "Say more. Or less."; teaseTimer = setTimeout(type, 1500); return; }
     if (box.value) { teaseTimer = setTimeout(type, 1500); return; }
     if (document.activeElement === box) { box.placeholder = currentTeaser ? text + "  ⏎" : text; teaseTimer = setTimeout(type, 1500); return; }
     i = Math.min(i + 1, text.length);
