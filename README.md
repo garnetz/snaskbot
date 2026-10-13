@@ -29,7 +29,7 @@ If you prefer the CLI, run `npm i -g vercel`, then `vercel` in this folder, `ver
 
 ## Calling the Recruitment Officer
 
-The "Call the Recruitment Officer ☎" chip (and the Call button in the chat header) opens a voice call with a parody of the joke on SNASK's contact page. It uses the browser's own speech recognition and voices, so it's free but sounds different on every device. Where the browser can't listen (Firefox, or a blocked mic) the visitor types and he answers out loud. The character never claims to be the real George Michael and doesn't imitate his voice. Its instructions are the hidden `officer` entry in `modes.json`.
+The phone icon (marked β) in the input field opens a voice call with a parody of the joke on SNASK's contact page. It uses the browser's own speech recognition and voices, so it's free but sounds different on every device. Where the browser can't listen (Firefox, or a blocked mic) the visitor types and he answers out loud. The character never claims to be the real George Michael and doesn't imitate his voice. Its instructions are the hidden `officer` entry in `modes.json`.
 
 ## Seeing what visitors ask (off by default)
 
