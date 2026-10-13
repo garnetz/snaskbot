@@ -27,6 +27,10 @@ If you prefer the CLI, run `npm i -g vercel`, then `vercel` in this folder, `ver
 - Answers stream in word by word from `api/chat.js`. Visitors can attach a logo or screenshot (shrunk to 1024px in the browser) to get it roasted, and any answer can be saved as a pink poster image.
 - The shop is live: `api/catalog.js` reads products and prices from snask.com's public WooCommerce Store API and new cases from the Our Work page, caches them for six hours, and falls back to `catalog.json` if snask.com doesn't answer.
 
+## Calling the Recruitment Officer
+
+The "Call the Recruitment Officer ☎" chip (and the Call button in the chat header) opens a voice call with a parody of the joke on SNASK's contact page. It uses the browser's own speech recognition and voices, so it's free but sounds different on every device. Where the browser can't listen (Firefox, or a blocked mic) the visitor types and he answers out loud. The character never claims to be the real George Michael and doesn't imitate his voice. Its instructions are the hidden `officer` entry in `modes.json`.
+
 ## Seeing what visitors ask (off by default)
 
 Set `SNASK_LOG_QUESTIONS=1` in Vercel and every question shows up in the project's **Logs** tab as a line like `{"event":"question","mode":"classic","turn":1,"q":"Is beige a crime?"}`. It logs only the question text, the mode and the turn number, never IP addresses. Vercel keeps logs for a short time, so copy out anything you want to keep. If this runs on snask.com, mention it in their privacy policy.
