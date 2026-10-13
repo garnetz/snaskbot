@@ -161,7 +161,15 @@ body {
 .call-kicker { margin: 0 0 14px; font: 800 .7rem/1 var(--font-display); font-stretch: 125%; letter-spacing: .12em; text-transform: uppercase; color: var(--hot); }
 .call-avatar { position: relative; width: 150px; height: 150px; display: grid; place-items: center; margin-bottom: 10px; }
 .call-avatar .robot { position: relative; z-index: 1; width: 150px; height: 150px; display: grid; place-items: center; background: var(--hot); border-radius: 50%; border: 5px solid var(--pink); transform: rotate(-6deg); }
-.call-avatar .robot svg { width: 70%; height: 70%; fill: var(--ink); }
+.call-avatar .robot svg { width: 70%; height: 70%; fill: var(--ink); overflow: visible; }
+.costume .lens { fill: var(--ink); stroke: #d9a521; stroke-width: 16; }
+.costume .temple { fill: none; stroke: #d9a521; stroke-width: 18; stroke-linecap: round; }
+.costume .glint { fill: none; stroke: var(--paper); stroke-width: 18; stroke-linecap: round; opacity: .8; }
+.costume .stubble circle { fill: var(--ink); opacity: .45; }
+.costume .hoop { fill: none; stroke: #f2c230; stroke-width: 20; }
+.costume .collar { fill: var(--ink); stroke: var(--pink); stroke-width: 12; stroke-linejoin: round; }
+.call-avatar .note-fly { position: absolute; left: 50%; top: 40%; z-index: 2; font: 900 1.8rem/1 var(--font-body); color: var(--hot); pointer-events: none; animation: notefly 1.8s var(--ease-out) forwards; }
+@keyframes notefly { from { transform: translate(-50%, 0) rotate(0); opacity: 0; } 15% { opacity: 1; } to { transform: translate(calc(-50% + var(--x)), -150px) rotate(var(--r)); opacity: 0; } }
 .call-avatar .ring { position: absolute; inset: 0; border-radius: 50%; border: 3px solid var(--hot); opacity: 0; }
 .call[data-state="talking"] .ring, .call[data-state="ringing"] .ring { animation: ring 1.6s var(--ease-out) infinite; }
 .call[data-state="talking"] .ring + .ring, .call[data-state="ringing"] .ring + .ring { animation-delay: .8s; }
@@ -187,6 +195,11 @@ body {
 .call-hang:hover { transform: rotate(-10deg) scale(1.08); }
 .call-note { margin: 22px 0 0; font-size: .72rem; color: var(--pink); opacity: .6; }
 .call :focus-visible { outline-color: var(--pink); }
+
+/* replies: each new word fades in */
+.bubble .w { display: inline-block; }
+.bubble .w.fresh { animation: wordin .42s var(--ease-out) both; animation-delay: var(--d, 0ms); }
+@keyframes wordin { from { opacity: 0; filter: blur(5px); transform: translateY(.3em); } }
 
 /* easter eggs */
 html.drain body { background: #cbbfae; }
@@ -628,10 +641,21 @@ const LOGO = {"h": 169, "letters": [{"w": 110, "src": "data:image/png;base64,iVB
 const ROBOT_BODY = "M200-120q-33 0-56.5-23.5T120-200v-400q0-100 70-170t170-70h240q100 0 170 70t70 170v400q0 33-23.5 56.5T760-120H200Zm0-80h560v-400q0-66-47-113t-113-47H360q-66 0-113 47t-47 113v400Z";
 const ROBOT_MOUTH = "M280-200v-80q0-33 23.5-56.5T360-360h240q33 0 56.5 23.5T680-280v80h-80v-80h-80v80h-80v-80h-80v80h-80Z";
 const HEART = "M0 70C-110 0-110-90-45-90C-20-90 0-70 0-50C0-70 20-90 45-90C110-90 110 0 0 70Z";
-function robotSVG() {
+// The Recruitment Officer's disguise (call screen only): aviators, stubble, a gold hoop and a leather collar.
+// It hints at an 80s pop star without depicting anyone real.
+const COSTUME = `<g class="costume">` +
+  `<path class="collar" d="M470-118 300-118 150 20 400 20ZM490-118 660-118 810 20 560 20Z"/>` +
+  `<g class="stubble">${[[250,-330],[290,-300],[235,-270],[275,-240],[315,-215],[710,-330],[670,-300],[725,-270],[685,-240],[645,-215],[250,-215],[710,-215]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="13"/>`).join("")}</g>` +
+  `<path class="temple" d="M245-628H128M715-628H832M462-622Q480-645 498-622"/>` +
+  `<path class="lens" d="M248-650H462Q476-650 474-632Q466-512 384-492Q302-474 262-560Q240-608 248-650Z"/>` +
+  `<path class="lens" d="M712-650H498Q484-650 486-632Q494-512 576-492Q658-474 698-560Q720-608 712-650Z"/>` +
+  `<path class="glint" d="M285-625 335-625M525-625 575-625"/>` +
+  `<circle class="hoop" cx="128" cy="-330" r="48"/></g>`;
+function robotSVG(costume) {
   return `<svg class="robo" viewBox="0 -960 960 960" aria-hidden="true"><path d="${ROBOT_BODY}"/><path d="${ROBOT_MOUTH}"/>` +
     `<circle class="eye" cx="360" cy="-560" r="80"/><circle class="eye" cx="600" cy="-560" r="80"/>` +
-    `<g class="hearts"><g transform="translate(360 -555)"><path d="${HEART}"/></g><g transform="translate(600 -555)"><path d="${HEART}"/></g></g></svg>`;
+    `<g class="hearts"><g transform="translate(360 -555)"><path d="${HEART}"/></g><g transform="translate(600 -555)"><path d="${HEART}"/></g></g>` +
+    (costume ? COSTUME : "") + `</svg>`;
 }
 // Robot moods. "think" runs while a reply is on its way; shock and love are short reactions on top.
 let moodTimer = null;
@@ -761,6 +785,30 @@ const LINK_HOSTS = ["snask.com", "www.snask.com", "showerbeer.se", "www.instagra
 function safeUrl(u) { try { const x = new URL(u.replace(/&amp;/g, "&")); return x.protocol === "https:" && LINK_HOSTS.includes(x.hostname); } catch { return false; } }
 
 // Turn the bot's [[case:id]], [[shop:id]] and [[ask:question]] tokens into cards and buttons.
+// Wrap each word in a span; words that weren't on screen in the last render fade in, one after another.
+function fadeWords(b) {
+  const walker = document.createTreeWalker(b, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  let i = 0;
+  const shown = b._shown || 0;
+  for (const node of nodes) {
+    const parts = node.textContent.split(/(\s+)/);
+    const frag = document.createDocumentFragment();
+    for (const part of parts) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) { frag.append(part); continue; }
+      const w = document.createElement("span");
+      w.className = "w";
+      w.textContent = part;
+      if (i >= shown) { w.classList.add("fresh"); w.style.setProperty("--d", Math.min(i - shown, 24) * 28 + "ms"); }
+      frag.append(w);
+      i++;
+    }
+    node.replaceWith(frag);
+  }
+  b._shown = i;
+}
 function renderReply(b, raw, done) {
   let text = raw.replace(/\[\[[^\]]*\]?$/, "");
   const cards = [], asks = [];
@@ -771,6 +819,7 @@ function renderReply(b, raw, done) {
   text = text.replace(/\[\[[a-z]+:[^\]]*\]\]/g, "");
   text = text.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   b.innerHTML = fmt(text);
+  fadeWords(b);
   b.classList.toggle("punch", done && !cards.length && !wantsBrief && !text.includes("\n") && plain(text).length <= 70);
   if (cards.length) {
     const wrap = document.createElement("div");
@@ -1397,6 +1446,7 @@ function callState(state, label) {
   $("call-talk-label").textContent = state === "listening" ? "Listening…" : state === "talking" ? "Tap to interrupt" : "Tap to talk";
   $("call-talk").disabled = state === "thinking" || state === "ringing";
   robotThinking(state === "thinking");
+  sax(state === "talking");
 }
 function callLine(you, him) {
   const el = $("call-line");
@@ -1435,6 +1485,7 @@ function hangUp() {
   try { call.rec && call.rec.abort(); } catch {}
   if (call.ctl) call.ctl.abort();
   robotThinking(false);
+  sax(false);
   call = null;
   $("call").hidden = true;
 }
@@ -1483,7 +1534,23 @@ async function hear(text) {
     callState("idle", e && e.name === "AbortError" ? "Your turn" : "Line crackled. Try again");
   } finally { me.ctl = null; }
 }
-$("call-robot").innerHTML = robotSVG();
+$("call-robot").innerHTML = robotSVG(true);
+// Saxophone notes drift out while he talks.
+let saxTimer = null;
+function sax(on) {
+  clearInterval(saxTimer);
+  if (!on || REDUCED) return;
+  const av = document.querySelector(".call-avatar");
+  saxTimer = setInterval(() => {
+    const n = document.createElement("span");
+    n.className = "note-fly";
+    n.textContent = Math.random() < .5 ? "♪" : "♫";
+    n.style.setProperty("--x", (Math.random() * 120 - 60) + "px");
+    n.style.setProperty("--r", (Math.random() * 60 - 30) + "deg");
+    av.append(n);
+    setTimeout(() => n.remove(), 1800);
+  }, 380);
+}
 $("call-talk").onclick = listen;
 $("call-hang").onclick = hangUp;
 $("voice").onclick = () => openCall();
